@@ -3,7 +3,7 @@ package swimmable;
 import java.awt.Graphics;
 import java.util.concurrent.CyclicBarrier;
 
-import aquarium.AbstractSeaFactory;
+import aquarium.SeaCreature;
 
 /**
  * This abstract class represents variety types of animals that can swim in the
@@ -15,8 +15,7 @@ import aquarium.AbstractSeaFactory;
  * @see Jellyfish
  */
 
-public abstract class Swimmable extends AnimalFactory implements
-		AbstractSeaFactory {
+public abstract class Swimmable extends AnimalFactory implements SeaCreature {
 
 	protected int horSpeed;
 	protected int verSpeed;

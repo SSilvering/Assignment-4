@@ -353,5 +353,8 @@ public class Fish extends Swimmable {
 		}
 	}
 
-	
+	@Override
+	public void drawCreature(Graphics g) {
+		this.drawAnimal(g);	
+	}	
 }

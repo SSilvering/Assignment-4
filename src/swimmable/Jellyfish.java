@@ -309,5 +309,8 @@ public class Jellyfish extends Swimmable {
 		}
 	}
 
-	
+	@Override
+	public void drawCreature(Graphics g) {
+		this.drawAnimal(g);		
+	}	
 }
