@@ -24,8 +24,7 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import swimmable.Fish;
-import swimmable.Jellyfish;
+import swimmable.AnimalFactory;
 import swimmable.Swimmable;
 
 /**
@@ -38,12 +37,11 @@ public class AddAnimalDialog extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	private AquaPanel aquaPanel;
-	private Swimmable animals;
 	private JTextField animalSizeField;
 	private JTextField verSpeedField;
 	private JTextField horSpeedField;
 	private JPanel addAnimal;
-	private String animalType;
+	private String Type;
 	private Color col;
 	private Integer size;
 	private Integer verSpeed;
@@ -83,17 +81,17 @@ public class AddAnimalDialog extends JDialog {
 		animalComboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (animalComboBox.getSelectedItem() == "Fish")
-					animalType = "Fish";
+					Type = "Fish";
 				else if (animalComboBox.getSelectedItem() == "Jellyfish")
-					animalType = "Jellyfish";
+					Type = "Jellyfish";
 			}
 		});
 		animalComboBox.setModel(new DefaultComboBoxModel<String>(new String[] {
-				"Fish", "Jellyfish" }));
+				"Fish", "Jellyfish"}));
 		animalComboBox.setSelectedIndex(0);
 		animalComboBox.setMaximumRowCount(2);
 
-		///////////////////////////////////////////////////////////////////
+		// /////////////////////////////////////////////////////////////////
 
 		JLabel lblAnimalSize = new JLabel("Animal Size:");
 		lblAnimalSize
@@ -146,7 +144,7 @@ public class AddAnimalDialog extends JDialog {
 		sizeSlider.setMinimum(20);
 		sizeSlider.setMaximum(320);
 
-		///////////////////////////////////////////////////////////////////
+		// /////////////////////////////////////////////////////////////////
 
 		JLabel lblVerticalSpeed = new JLabel("Vertical Speed:");
 		lblVerticalSpeed
@@ -198,7 +196,7 @@ public class AddAnimalDialog extends JDialog {
 		verSpeedSlider.setMinimum(1);
 		verSpeedSlider.setMaximum(10);
 
-		///////////////////////////////////////////////////////////////////
+		// /////////////////////////////////////////////////////////////////
 
 		JLabel lblHorizontalSpeed = new JLabel("Horizontal Speed:");
 		lblHorizontalSpeed
@@ -249,7 +247,7 @@ public class AddAnimalDialog extends JDialog {
 		horSpeedSlider.setMinimum(1);
 		horSpeedSlider.setMaximum(10);
 
-		///////////////////////////////////////////////////////////////////
+		// /////////////////////////////////////////////////////////////////
 
 		JLabel lblAnimalColor = new JLabel("Animal Color:");
 		lblAnimalColor.setToolTipText("Choose the color of the animal.");
@@ -275,28 +273,29 @@ public class AddAnimalDialog extends JDialog {
 				new String[] { "Red", "Blue", "Cyan", "Green", "Magenta" }));
 		animalColorcomboBox.setSelectedIndex(0);
 
-		///////////////////////////////////////////////////////////////////
+		// /////////////////////////////////////////////////////////////////
 
 		JButton btnAdd = new JButton("OK");
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (e.getSource().equals(btnAdd)) {
-					createAnimal(animalType, col, size, verSpeed, horSpeed);
+					createAnimal(Type, col, size, verSpeed, horSpeed);
 					System.out.println("Create Animal");
 					dispose();
 				}
 			}
 		});
 
-		///////////////////////////////////////////////////////////////////
-		
+		// /////////////////////////////////////////////////////////////////
+
 		GridBagConstraints gbc_addButton = new GridBagConstraints();
 		gbc_addButton.insets = new Insets(0, 0, 0, 5);
 		gbc_addButton.gridx = 2;
 		gbc_addButton.gridy = 8;
 
-		///////////////////////////////////////////////////////////////////
+		// /////////////////////////////////////////////////////////////////
 
+		// rejoin GroupLayout
 		GroupLayout groupLayout = new GroupLayout(this.getContentPane());
 		groupLayout
 				.setHorizontalGroup(groupLayout
@@ -502,12 +501,11 @@ public class AddAnimalDialog extends JDialog {
 																GroupLayout.PREFERRED_SIZE,
 																GroupLayout.DEFAULT_SIZE,
 																GroupLayout.PREFERRED_SIZE))
-										.addGap(23).addComponent(btnAdd)
-										.addContainerGap(14, Short.MAX_VALUE)));
+										.addGap(3).addComponent(btnAdd)
+										.addGap(23)));
 
 		this.getContentPane().setLayout(groupLayout);
-
-		// //////////////////////////////////////////////////////////////////
+		// endrejoin GroupLayout
 	}
 
 	/**
@@ -525,16 +523,18 @@ public class AddAnimalDialog extends JDialog {
 	 * @param horSpeed
 	 *            Horizontal speed of the new animal.
 	 */
-	private void createAnimal(String animalType, Color col, Integer size,
+	private void createAnimal(String Type, Color col, Integer size,
 			Integer verSpeed, Integer horSpeed) {
 
-		if (animalType == "Fish") {
-			animals = new Fish(aquaPanel, col, horSpeed, verSpeed, size);
-			aquaPanel.addAnimal(animals);
-		} else if (animalType == "Jellyfish") {
-			animals = new Jellyfish(aquaPanel, col, horSpeed, verSpeed, size);
-			aquaPanel.addAnimal(animals);
+		if (Type == "Fish") {
+			AbstractSeaFactory asf = new AnimalFactory(aquaPanel, col,
+					horSpeed, verSpeed, size);
+			aquaPanel.addCreature((Swimmable) asf.produceSeaCreature("Fish"));
+		} else if (Type == "Jellyfish") {
+			AbstractSeaFactory asf = new AnimalFactory(aquaPanel, col,
+					horSpeed, verSpeed, size);
+			aquaPanel
+					.addCreature((Swimmable) asf.produceSeaCreature("Jellyfish"));
 		}
-
 	}
 }

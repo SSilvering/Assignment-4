@@ -29,7 +29,7 @@ import aquaContents.Worm;
 /**
  * This class represents the panels and other elements in the main framework.
  * 
- * @author Shai Hod, ID: 304800402
+ * @author Shai Hod, ID: 304800352
  *
  */
 
@@ -38,11 +38,13 @@ public class AquaPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private AquaFrame aquaFrame;
 	private BufferedImage img = null;
-	private HashSet<Swimmable> animals = new HashSet<Swimmable>();
-	private Iterator<Swimmable> ITE;
+	private HashSet<SeaCreature> creatures = new HashSet<SeaCreature>();
+	private Iterator<SeaCreature> ITE;
 	private JScrollPane scrollPane;
 	private boolean isFood = false;
 	private boolean infoClicked = false;
+	private int animalsCount = 0;
+	private int plantsCount = 0;
 	public static boolean AQisSuspend = false;
 
 	/**
@@ -54,7 +56,8 @@ public class AquaPanel extends JPanel {
 	 */
 	public AquaPanel(AquaFrame aquaFrame) {
 		this.aquaFrame = aquaFrame;
-		this.aquaFrame.setBounds(600, 300, 800, 600);
+		this.aquaFrame.setBounds(0, 0, 800, 600);
+		this.aquaFrame.setLocationRelativeTo(aquaFrame);
 		this.aquaFrame.setResizable(false);
 		this.setBackground(Color.WHITE);
 		Panel(); // initialize panel buttons
@@ -72,8 +75,8 @@ public class AquaPanel extends JPanel {
 		Panel.setLayout(new FlowLayout());
 
 		// "Add Animal" button.
-		JButton addAnimalBtn = new JButton("Add Animal");
-		addAnimalBtn.setPreferredSize(new Dimension(107, 29));
+		JButton addAnimalBtn = new JButton("<html><div style='text-align: center;'>Add<br />Animal</html>");
+		addAnimalBtn.setPreferredSize(new Dimension(93, 35));
 		addAnimalBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Add Animal");
@@ -82,9 +85,20 @@ public class AquaPanel extends JPanel {
 		});
 		Panel.add(addAnimalBtn);
 
+		// "Add Plant" button.
+		JButton addPlantBtn = new JButton("<html><div style='text-align: center;'>Add<br />Plant</html>");
+		addPlantBtn.setPreferredSize(new Dimension(93, 35));
+		addPlantBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Add Plant");
+				addPlantDialog();
+			}
+		});
+		Panel.add(addPlantBtn);
+		
 		// "Sleep" button.
 		JButton sleepBtn = new JButton("Sleep");
-		sleepBtn.setPreferredSize(new Dimension(107, 29));
+		sleepBtn.setPreferredSize(new Dimension(93, 35));
 		sleepBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Sleep");
@@ -95,7 +109,7 @@ public class AquaPanel extends JPanel {
 
 		// "Wake up" button.
 		JButton wakeUpBtn = new JButton("Wake up");
-		wakeUpBtn.setPreferredSize(new Dimension(107, 29));
+		wakeUpBtn.setPreferredSize(new Dimension(93, 35));
 		wakeUpBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Wake UP");
@@ -106,7 +120,7 @@ public class AquaPanel extends JPanel {
 
 		// "Reset" button.
 		JButton resetBtn = new JButton("Reset");
-		resetBtn.setPreferredSize(new Dimension(107, 29));
+		resetBtn.setPreferredSize(new Dimension(93, 35));
 		resetBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Reset");
@@ -117,7 +131,7 @@ public class AquaPanel extends JPanel {
 
 		// "Food" button.
 		JButton foodBtn = new JButton("Food");
-		foodBtn.setPreferredSize(new Dimension(107, 29));
+		foodBtn.setPreferredSize(new Dimension(93, 35));
 		foodBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Food");
@@ -128,7 +142,7 @@ public class AquaPanel extends JPanel {
 
 		// "Info" button.
 		JButton infoBtn = new JButton("Info");
-		infoBtn.setPreferredSize(new Dimension(107, 29));
+		infoBtn.setPreferredSize(new Dimension(93, 35));
 		infoBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Info");
@@ -139,7 +153,7 @@ public class AquaPanel extends JPanel {
 
 		// "Exit" button.
 		JButton exitBtn = new JButton("Exit");
-		exitBtn.setPreferredSize(new Dimension(107, 29));
+		exitBtn.setPreferredSize(new Dimension(93, 35));
 		exitBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Exit");
@@ -165,9 +179,9 @@ public class AquaPanel extends JPanel {
 					"Size", "Hor. Speed", "Ver. Speed", "Eat Count" });
 			JTable table = new JTable(model);
 
-			ITE = animals.iterator();
+			ITE = creatures.iterator();
 			while (ITE.hasNext()) {
-				Swimmable cur = ITE.next();
+				Swimmable cur = (Swimmable) ITE.next();
 
 				model.addRow(new Object[] { cur.getAnimalName(),
 						cur.getColor(), cur.getSize(), cur.getHorSpeed(),
@@ -198,10 +212,13 @@ public class AquaPanel extends JPanel {
 	private void food() {
 		try {
 			isFood = true;
-			CyclicBarrier b = new CyclicBarrier(animals.size());
-			ITE = animals.iterator();
+			CyclicBarrier b = new CyclicBarrier(animalsCount);
+			ITE = creatures.iterator();
 			while (ITE.hasNext()) {
-				ITE.next().setBarrier(b);
+				try {
+					((Swimmable) ITE.next()).setBarrier(b);
+				} catch (ClassCastException ex) {
+				}
 			}
 		} catch (IllegalArgumentException ex) {
 			JOptionPane.showMessageDialog(aquaFrame,
@@ -239,13 +256,18 @@ public class AquaPanel extends JPanel {
 	 * animal for stopping all the animals threads.
 	 */
 	private void resetBoard() {
-		ITE = animals.iterator();
+		ITE = creatures.iterator();
 		while (ITE.hasNext()) {
-			ITE.next().setReset();
+			try {
+				((Swimmable) ITE.next()).setReset();
+			} catch (ClassCastException ex) {
+			}
 		}
 
-		animals.clear(); // clear the main frame from animal.
+		creatures.clear(); // clear the main frame from animal.
 		isFood = false; // if there is a food on the board it clears it.
+		animalsCount = 0;
+		plantsCount = 0;		
 
 		if (img != null)
 			img = null;
@@ -257,9 +279,12 @@ public class AquaPanel extends JPanel {
 	 * This method causes to all the threads of the aquarium to wake up.
 	 */
 	private void animalWakeup() {
-		ITE = animals.iterator();
+		ITE = creatures.iterator();
 		while (ITE.hasNext()) {
-			ITE.next().setResume();
+			try{
+			((Swimmable) ITE.next()).setResume();
+			}catch (ClassCastException ex){
+			}
 		}
 	}
 
@@ -267,9 +292,12 @@ public class AquaPanel extends JPanel {
 	 * This method causes to all the threads of the aquarium to sleep.
 	 */
 	private void animalSleep() {
-		ITE = animals.iterator();
+		ITE = creatures.iterator();
 		while (ITE.hasNext()) {
-			ITE.next().setSuspend();
+			try{
+			((Swimmable) ITE.next()).setSuspend();
+			}catch (ClassCastException ex){
+			}
 		}
 	}
 
@@ -280,7 +308,7 @@ public class AquaPanel extends JPanel {
 	 * appear.
 	 */
 	private void addAnimalDialog() {
-		if (animals.size() > 4)
+		if (animalsCount > 4)
 			JOptionPane.showMessageDialog(aquaFrame,
 					"Cannot create more than 5 animals.", "Error",
 					JOptionPane.INFORMATION_MESSAGE);
@@ -292,16 +320,46 @@ public class AquaPanel extends JPanel {
 					JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
+	
+	/**
+	 * This method opening the adds plant dialog for adding new plant to the
+	 * aquarium. It checks for the number of plants in the aquarium, if less
+	 * than 5, add plant dialog will open, otherwise appropriate message will
+	 * appear.
+	 */
+	private void addPlantDialog() {	
+		if (plantsCount > 4)
+			JOptionPane.showMessageDialog(aquaFrame,
+					"Cannot create more than 5 plants.", "Error",
+					JOptionPane.INFORMATION_MESSAGE);
+		else 
+			new AddPlantDialog(this);		
+	}
 
 	/**
-	 * This method adds a new animal to the aquarium.
+	 * This method adds a new creature to the aquarium.
 	 * 
-	 * @param animal
-	 *            gets an animal instance for adding to the panel.
+	 * @param sc
+	 *            gets a seacreature instance for adding to the panel.
 	 */
-	protected void addAnimal(Swimmable animal) {
-		animals.add(animal);
-		animal.start();
+	protected void addCreature(SeaCreature sc) {
+
+		if (sc.toString().equals("Zostera")
+				|| sc.toString().equals("Laminaria")) {
+			creatures.add(sc);
+			plantsCount++;
+			this.repaint();
+		} else {
+			try {
+				creatures.add(sc);
+				((Thread) sc).start();
+				animalsCount++;
+			} catch (ClassCastException ex) {
+				JOptionPane.showMessageDialog(aquaFrame,
+						"Cannot continue right now.", "Error",
+						JOptionPane.INFORMATION_MESSAGE);
+			}
+		}
 	}
 
 	/**
@@ -374,9 +432,9 @@ public class AquaPanel extends JPanel {
 			g.drawImage(img, 0, 0, getWidth(), getHeight(), this);
 		}
 
-		ITE = animals.iterator();
+		ITE = creatures.iterator();
 		while (ITE.hasNext()) {
-			ITE.next().drawAnimal(g);
+			ITE.next().drawCreature(g);
 		}
 
 		if (isFood == true) {

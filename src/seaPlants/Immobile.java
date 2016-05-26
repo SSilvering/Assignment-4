@@ -15,4 +15,8 @@ public abstract class Immobile extends PlantFactory implements SeaCreature {
 	String name;
 	
 	public abstract void drawCreature(Graphics g);
+	
+	public String toString(){
+		return name;
+	}
 }
