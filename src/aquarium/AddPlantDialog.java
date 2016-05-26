@@ -166,18 +166,18 @@ public class AddPlantDialog extends JDialog {
 				xPosSlider.setValue(1);
 				if (!typed.matches("^[0-9]+$") || typed.length() > 3) {
 					JOptionPane.showMessageDialog(addAnimal,
-							"Please enter a number between from 1 to 800",
+							"Please enter a number between from 40 to 745",
 							"Error", JOptionPane.INFORMATION_MESSAGE);
 					xposField.setText("1");
 					return;
 				}
 
 				int num = Integer.parseInt(typed);
-				if (num >= 1 && num <= 800)
+				if (num >= 40 && num <= 745)
 					xPosSlider.setValue(Integer.parseInt(typed));
 				else {
 					JOptionPane.showMessageDialog(addAnimal,
-							"Please enter a number between from 1 to 800",
+							"Please enter a number between from 40 to 745",
 							"Error", JOptionPane.INFORMATION_MESSAGE);
 					xposField.setText("1");
 					return;
@@ -190,8 +190,8 @@ public class AddPlantDialog extends JDialog {
 		xPosSlider.setSnapToTicks(true);
 		xPosSlider.setPaintLabels(true);
 		xPosSlider.setPaintTicks(true);
-		xPosSlider.setMinimum(1);
-		xPosSlider.setMaximum(800);
+		xPosSlider.setMinimum(40);
+		xPosSlider.setMaximum(745);
 
 		// /////////////////////////////////////////////////////////////////
 
@@ -217,18 +217,18 @@ public class AddPlantDialog extends JDialog {
 				yPosSlider.setValue(1);
 				if (!typed.matches("^[0-9]+$") || typed.length() > 3) {
 					JOptionPane.showMessageDialog(addAnimal,
-							"Please enter a number between from 1 to 600",
+							"Please enter a number between from 20 to 600",
 							"Error", JOptionPane.INFORMATION_MESSAGE);
 					yposField.setText("1");
 					return;
 				}
 
 				int num = Integer.parseInt(typed);
-				if (num >= 1 && num <= 600)
+				if (num >= 20 && num <= 600)
 					yPosSlider.setValue(Integer.parseInt(typed));
 				else {
 					JOptionPane.showMessageDialog(addAnimal,
-							"Please enter a number between from 1 to 600",
+							"Please enter a number between from 20 to 600",
 							"Error", JOptionPane.INFORMATION_MESSAGE);
 					yposField.setText("1");
 					return;
@@ -242,7 +242,7 @@ public class AddPlantDialog extends JDialog {
 		yPosSlider.setSnapToTicks(true);
 		yPosSlider.setPaintTicks(true);
 		yPosSlider.setPaintLabels(true);
-		yPosSlider.setMinimum(1);
+		yPosSlider.setMinimum(20);
 		yPosSlider.setMaximum(600);
 
 		// /////////////////////////////////////////////////////////////////
