@@ -16,7 +16,6 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -40,12 +39,13 @@ public class AddAnimalDialog extends JDialog {
 	private JTextField animalSizeField;
 	private JTextField verSpeedField;
 	private JTextField horSpeedField;
-	private JPanel addAnimal;
 	private String Type;
 	private Color col;
 	private Integer size;
 	private Integer verSpeed;
 	private Integer horSpeed;
+	private JTextField feedField;
+	private int feedFreq;
 
 	/**
 	 * Constructor initializes the dialog for adding new animal to the aquarium.
@@ -113,7 +113,7 @@ public class AddAnimalDialog extends JDialog {
 				String typed = animalSizeField.getText();
 				sizeSlider.setValue(20);
 				if (!typed.matches("^[0-9]+$") || typed.length() > 3) {
-					JOptionPane.showMessageDialog(addAnimal,
+					JOptionPane.showMessageDialog(new JDialog(),
 							"Please enter a number between from 20 to 320",
 							"Error", JOptionPane.INFORMATION_MESSAGE);
 					animalSizeField.setText("20");
@@ -124,7 +124,7 @@ public class AddAnimalDialog extends JDialog {
 				if (num >= 20 && num <= 320)
 					sizeSlider.setValue(Integer.parseInt(typed));
 				else {
-					JOptionPane.showMessageDialog(addAnimal,
+					JOptionPane.showMessageDialog(new JDialog(),
 							"Please enter a number between from 20 to 320",
 							"Error", JOptionPane.INFORMATION_MESSAGE);
 					animalSizeField.setText("20");
@@ -167,7 +167,7 @@ public class AddAnimalDialog extends JDialog {
 				String typed = verSpeedField.getText();
 				verSpeedSlider.setValue(1);
 				if (!typed.matches("^[0-9]+$") || typed.length() > 2) {
-					JOptionPane.showMessageDialog(addAnimal,
+					JOptionPane.showMessageDialog(new JDialog(),
 							"Please enter a number between from 1 to 10",
 							"Error", JOptionPane.INFORMATION_MESSAGE);
 					verSpeedField.setText("1");
@@ -178,7 +178,7 @@ public class AddAnimalDialog extends JDialog {
 				if (num >= 1 && num <= 10)
 					verSpeedSlider.setValue(Integer.parseInt(typed));
 				else {
-					JOptionPane.showMessageDialog(addAnimal,
+					JOptionPane.showMessageDialog(new JDialog(),
 							"Please enter a number between from 1 to 10",
 							"Error", JOptionPane.INFORMATION_MESSAGE);
 					verSpeedField.setText("1");
@@ -218,7 +218,7 @@ public class AddAnimalDialog extends JDialog {
 				String typed = horSpeedField.getText();
 				horSpeedSlider.setValue(1);
 				if (!typed.matches("^[0-9]+$") || typed.length() > 2) {
-					JOptionPane.showMessageDialog(addAnimal,
+					JOptionPane.showMessageDialog(new JDialog(),
 							"Please enter a number between from 1 to 10",
 							"Error", JOptionPane.INFORMATION_MESSAGE);
 					horSpeedField.setText("1");
@@ -229,7 +229,7 @@ public class AddAnimalDialog extends JDialog {
 				if (num >= 1 && num <= 10)
 					horSpeedSlider.setValue(Integer.parseInt(typed));
 				else {
-					JOptionPane.showMessageDialog(addAnimal,
+					JOptionPane.showMessageDialog(new JDialog(),
 							"Please enter a number between from 1 to 10",
 							"Error", JOptionPane.INFORMATION_MESSAGE);
 					horSpeedField.setText("1");
@@ -275,11 +275,26 @@ public class AddAnimalDialog extends JDialog {
 
 		// /////////////////////////////////////////////////////////////////
 
-		JButton btnAdd = new JButton("OK");
+		JButton btnAdd = new JButton("Add");
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (e.getSource().equals(btnAdd)) {
-					createAnimal(Type, col, size, verSpeed, horSpeed);
+					if (feedFreq == 0) {
+						feedFreq = 5; // The default value of the frequency in
+										// case the user forgot enter.
+					}
+
+					AbstractSeaFactory asf = new AnimalFactory(aquaPanel, col,
+							horSpeed, verSpeed, size, feedFreq);
+
+					if (Type == "Fish") {
+						aquaPanel.addCreature((Swimmable) asf
+								.produceSeaCreature("Fish"));
+					} else if (Type == "Jellyfish") {
+						aquaPanel.addCreature((Swimmable) asf
+								.produceSeaCreature("Jellyfish"));
+					}
+
 					System.out.println("Create Animal");
 					dispose();
 				}
@@ -292,249 +307,124 @@ public class AddAnimalDialog extends JDialog {
 		gbc_addButton.insets = new Insets(0, 0, 0, 5);
 		gbc_addButton.gridx = 2;
 		gbc_addButton.gridy = 8;
+		
+		JLabel lblFeedingFrequency = new JLabel("Feeding Freq:");
+		lblFeedingFrequency.setToolTipText("Enter the feeding frequency of the animal.");
+		
+		feedField = new JTextField();
+		feedField.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				feedFreq = Integer.parseUnsignedInt(feedField.getText());
+			}
+		});
+		feedField.setToolTipText("Enter the feeding frequency of the animal.");
+		feedField.setHorizontalAlignment(SwingConstants.CENTER);
+		feedField.setColumns(3);
 
 		// /////////////////////////////////////////////////////////////////
 
 		// rejoin GroupLayout
 		GroupLayout groupLayout = new GroupLayout(this.getContentPane());
-		groupLayout
-				.setHorizontalGroup(groupLayout
-						.createParallelGroup(Alignment.LEADING)
-						.addGroup(
-								groupLayout
-										.createSequentialGroup()
-										.addGap(60)
-										.addGroup(
-												groupLayout
-														.createParallelGroup(
-																Alignment.LEADING)
-														.addGroup(
-																groupLayout
-																		.createSequentialGroup()
-																		.addComponent(
-																				lblAnimalType)
-																		.addGap(28)
-																		.addComponent(
-																				animalComboBox,
-																				GroupLayout.PREFERRED_SIZE,
-																				79,
-																				GroupLayout.PREFERRED_SIZE))
-														.addGroup(
-																groupLayout
-																		.createSequentialGroup()
-																		.addComponent(
-																				lblAnimalSize)
-																		.addGap(51)
-																		.addComponent(
-																				animalSizeField,
-																				GroupLayout.PREFERRED_SIZE,
-																				GroupLayout.DEFAULT_SIZE,
-																				GroupLayout.PREFERRED_SIZE)
-																		.addGap(27)
-																		.addComponent(
-																				sizeSlider,
-																				GroupLayout.PREFERRED_SIZE,
-																				GroupLayout.DEFAULT_SIZE,
-																				GroupLayout.PREFERRED_SIZE))
-														.addGroup(
-																groupLayout
-																		.createSequentialGroup()
-																		.addComponent(
-																				lblVerticalSpeed)
-																		.addGap(36)
-																		.addComponent(
-																				verSpeedField,
-																				GroupLayout.PREFERRED_SIZE,
-																				GroupLayout.DEFAULT_SIZE,
-																				GroupLayout.PREFERRED_SIZE)
-																		.addGap(27)
-																		.addComponent(
-																				verSpeedSlider,
-																				GroupLayout.PREFERRED_SIZE,
-																				GroupLayout.DEFAULT_SIZE,
-																				GroupLayout.PREFERRED_SIZE))
-														.addGroup(
-																groupLayout
-																		.createSequentialGroup()
-																		.addComponent(
-																				lblAnimalColor)
-																		.addGap(27)
-																		.addComponent(
-																				animalColorcomboBox,
-																				GroupLayout.PREFERRED_SIZE,
-																				GroupLayout.DEFAULT_SIZE,
-																				GroupLayout.PREFERRED_SIZE))
-														.addGroup(
-																groupLayout
-																		.createSequentialGroup()
-																		.addComponent(
-																				lblHorizontalSpeed)
-																		.addGap(23)
-																		.addComponent(
-																				horSpeedField,
-																				GroupLayout.PREFERRED_SIZE,
-																				GroupLayout.DEFAULT_SIZE,
-																				GroupLayout.PREFERRED_SIZE)
-																		.addGap(27)
-																		.addGroup(
-																				groupLayout
-																						.createParallelGroup(
-																								Alignment.LEADING)
-																						.addComponent(
-																								btnAdd)
-																						.addComponent(
-																								horSpeedSlider,
-																								GroupLayout.PREFERRED_SIZE,
-																								GroupLayout.DEFAULT_SIZE,
-																								GroupLayout.PREFERRED_SIZE))))
-										.addContainerGap(81, Short.MAX_VALUE)));
-		groupLayout
-				.setVerticalGroup(groupLayout
-						.createParallelGroup(Alignment.LEADING)
-						.addGroup(
-								groupLayout
-										.createSequentialGroup()
-										.addGroup(
-												groupLayout
-														.createParallelGroup(
-																Alignment.LEADING)
-														.addGroup(
-																groupLayout
-																		.createSequentialGroup()
-																		.addGap(3)
-																		.addComponent(
-																				lblAnimalType))
-														.addComponent(
-																animalComboBox,
-																GroupLayout.PREFERRED_SIZE,
-																GroupLayout.DEFAULT_SIZE,
-																GroupLayout.PREFERRED_SIZE))
-										.addPreferredGap(
-												ComponentPlacement.RELATED)
-										.addGroup(
-												groupLayout
-														.createParallelGroup(
-																Alignment.LEADING)
-														.addGroup(
-																groupLayout
-																		.createSequentialGroup()
-																		.addGap(15)
-																		.addComponent(
-																				lblAnimalSize))
-														.addGroup(
-																groupLayout
-																		.createSequentialGroup()
-																		.addGap(12)
-																		.addComponent(
-																				animalSizeField,
-																				GroupLayout.PREFERRED_SIZE,
-																				GroupLayout.DEFAULT_SIZE,
-																				GroupLayout.PREFERRED_SIZE))
-														.addComponent(
-																sizeSlider,
-																GroupLayout.PREFERRED_SIZE,
-																GroupLayout.DEFAULT_SIZE,
-																GroupLayout.PREFERRED_SIZE))
-										.addGap(5)
-										.addGroup(
-												groupLayout
-														.createParallelGroup(
-																Alignment.LEADING)
-														.addGroup(
-																groupLayout
-																		.createSequentialGroup()
-																		.addGap(15)
-																		.addComponent(
-																				lblVerticalSpeed))
-														.addGroup(
-																groupLayout
-																		.createSequentialGroup()
-																		.addGap(12)
-																		.addComponent(
-																				verSpeedField,
-																				GroupLayout.PREFERRED_SIZE,
-																				GroupLayout.DEFAULT_SIZE,
-																				GroupLayout.PREFERRED_SIZE))
-														.addComponent(
-																verSpeedSlider,
-																GroupLayout.PREFERRED_SIZE,
-																GroupLayout.DEFAULT_SIZE,
-																GroupLayout.PREFERRED_SIZE))
-										.addGap(5)
-										.addGroup(
-												groupLayout
-														.createParallelGroup(
-																Alignment.LEADING)
-														.addGroup(
-																groupLayout
-																		.createSequentialGroup()
-																		.addGap(15)
-																		.addComponent(
-																				lblHorizontalSpeed))
-														.addGroup(
-																groupLayout
-																		.createSequentialGroup()
-																		.addGap(12)
-																		.addComponent(
-																				horSpeedField,
-																				GroupLayout.PREFERRED_SIZE,
-																				GroupLayout.DEFAULT_SIZE,
-																				GroupLayout.PREFERRED_SIZE))
-														.addComponent(
-																horSpeedSlider,
-																GroupLayout.PREFERRED_SIZE,
-																GroupLayout.DEFAULT_SIZE,
-																GroupLayout.PREFERRED_SIZE))
-										.addGap(5)
-										.addGroup(
-												groupLayout
-														.createParallelGroup(
-																Alignment.LEADING)
-														.addGroup(
-																groupLayout
-																		.createSequentialGroup()
-																		.addGap(3)
-																		.addComponent(
-																				lblAnimalColor))
-														.addComponent(
-																animalColorcomboBox,
-																GroupLayout.PREFERRED_SIZE,
-																GroupLayout.DEFAULT_SIZE,
-																GroupLayout.PREFERRED_SIZE))
-										.addGap(3).addComponent(btnAdd)
-										.addGap(23)));
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(60)
+					.addComponent(lblAnimalType)
+					.addGap(28)
+					.addComponent(animalComboBox, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(267, Short.MAX_VALUE))
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(66)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(lblFeedingFrequency, 0, 0, Short.MAX_VALUE)
+							.addGap(345))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addGroup(groupLayout.createSequentialGroup()
+									.addComponent(lblAnimalColor)
+									.addGap(40)
+									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+										.addComponent(animalColorcomboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addGroup(groupLayout.createSequentialGroup()
+											.addGap(10)
+											.addComponent(feedField, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)))
+									.addGap(77)
+									.addComponent(btnAdd, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE))
+								.addGroup(groupLayout.createSequentialGroup()
+									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+										.addGroup(groupLayout.createSequentialGroup()
+											.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+												.addGroup(groupLayout.createSequentialGroup()
+													.addComponent(lblAnimalSize)
+													.addGap(46))
+												.addGroup(groupLayout.createSequentialGroup()
+													.addComponent(lblHorizontalSpeed)
+													.addGap(18)))
+											.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+												.addComponent(verSpeedField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addComponent(animalSizeField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addComponent(horSpeedField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+										.addComponent(lblVerticalSpeed))
+									.addGap(47)
+									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+										.addComponent(horSpeedSlider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(verSpeedSlider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(sizeSlider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
+							.addContainerGap(50, Short.MAX_VALUE))))
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(27)
+							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+								.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+									.addComponent(animalSizeField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addComponent(lblAnimalSize))
+								.addGroup(groupLayout.createSequentialGroup()
+									.addComponent(sizeSlider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED)))
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addGroup(groupLayout.createSequentialGroup()
+									.addGap(20)
+									.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+										.addComponent(lblVerticalSpeed)
+										.addComponent(verSpeedField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+								.addGroup(groupLayout.createSequentialGroup()
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(verSpeedSlider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addGroup(groupLayout.createSequentialGroup()
+									.addGap(9)
+									.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+										.addComponent(lblHorizontalSpeed)
+										.addComponent(horSpeedField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+								.addGroup(groupLayout.createSequentialGroup()
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(horSpeedSlider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(3)
+							.addComponent(lblAnimalType))
+						.addComponent(animalComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(11)
+							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+								.addComponent(animalColorcomboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblAnimalColor))
+							.addGap(9)
+							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+								.addComponent(lblFeedingFrequency)
+								.addComponent(feedField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(btnAdd, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)))
+					.addContainerGap(15, Short.MAX_VALUE))
+		);
 
 		this.getContentPane().setLayout(groupLayout);
 		// endrejoin GroupLayout
-	}
-
-	/**
-	 * This method creates a new instance for specific animal. First, it checks
-	 * which animal to create, and accordingly creates the instance.
-	 * 
-	 * @param animalType
-	 *            Name of the type of the new animal.
-	 * @param col
-	 *            Color for the new animal.
-	 * @param size
-	 *            Size for the new animal.
-	 * @param verSpeed
-	 *            Vertical speed of the new animal.
-	 * @param horSpeed
-	 *            Horizontal speed of the new animal.
-	 */
-	private void createAnimal(String Type, Color col, Integer size,
-			Integer verSpeed, Integer horSpeed) {
-
-		if (Type == "Fish") {
-			AbstractSeaFactory asf = new AnimalFactory(aquaPanel, col,
-					horSpeed, verSpeed, size);
-			aquaPanel.addCreature((Swimmable) asf.produceSeaCreature("Fish"));
-		} else if (Type == "Jellyfish") {
-			AbstractSeaFactory asf = new AnimalFactory(aquaPanel, col,
-					horSpeed, verSpeed, size);
-			aquaPanel
-					.addCreature((Swimmable) asf.produceSeaCreature("Jellyfish"));
-		}
 	}
 }

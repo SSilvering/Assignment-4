@@ -29,6 +29,8 @@ public class Fish extends Swimmable {
 	private int foodCount;
 	private boolean isSuspend = false;
 	private boolean isReset = false;
+	private int numTurns = 0;
+	private int temp_x_dir = 0;
 
 	/**
 	 * Constructor for initializing a new fish.
@@ -45,8 +47,8 @@ public class Fish extends Swimmable {
 	 *            gets the size of a fish.
 	 */
 	public Fish(AquaPanel aquaPanel, Color col, int horSpeed, int verSpeed,
-			int size) {
-		super(horSpeed, verSpeed, size, col);
+			int size, int feedFreq) {
+		super(horSpeed, verSpeed, size, col, feedFreq);
 		super.setName("Fish");
 
 		// check if adding new fish when the board is suspended, in case and
@@ -60,6 +62,8 @@ public class Fish extends Swimmable {
 			this.x_dir = -1;
 		else
 			this.x_dir = 1;
+		
+		this.temp_x_dir = x_dir;
 
 		this.y_dir = 1;
 		this.x_front = rand.nextInt((aquaPanel.getWidth() - size) + 1) + size;
@@ -76,7 +80,7 @@ public class Fish extends Swimmable {
 	 * @param obj
 	 */
 	public Fish(Fish obj) {
-		super(obj.horSpeed, obj.verSpeed, obj.size, obj.col);
+		super(obj.horSpeed, obj.verSpeed, obj.size, obj.col, obj.feedFreq);
 		super.setName(obj.getName());
 
 		// check if adding new fish when the board is suspended, in case and
@@ -365,6 +369,13 @@ public class Fish extends Swimmable {
 			// update position of the animal
 			x_front += (x_dir * horSpeed);
 			y_front += (y_dir * verSpeed);
+			
+			if (checkHungry()) {
+				synchronized (this) {
+					aquaPanel.notify("Hungry");
+					numTurns = 0;
+				}
+			}
 
 			synchronized (Fish.class) {
 				aquaPanel.repaint();
@@ -375,7 +386,18 @@ public class Fish extends Swimmable {
 	@Override
 	public void drawCreature(Graphics g) {
 		this.drawAnimal(g);	
-	}	
+	}
 
-	
+	@Override
+	public boolean checkHungry() {
+		if((aquaPanel.thereIsFood() == false) && temp_x_dir != x_dir){
+			if(numTurns < super.feedFreq)
+				numTurns++;
+			
+			temp_x_dir = x_dir;
+		}else if(numTurns == super.feedFreq)
+			return true;
+		
+		return false;
+	}		
 }

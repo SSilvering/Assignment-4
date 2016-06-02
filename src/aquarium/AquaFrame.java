@@ -21,8 +21,8 @@ public class AquaFrame extends JFrame implements ActionListener {
 	
 	private static final long serialVersionUID = 1L;
 	private AquaPanel panel;
-	private String[] names = { "Exit", "Image", "Blue", "None", "Help" };
-	private JMenu m1, m2, m3;
+	private String[] names = { "Exit", "Image", "Blue", "None", "Save Object State", "Restore Object State", "Help" };
+	private JMenu m1, m2, m3, m4;
 	private JMenuItem[] mi;
 	private JMenuBar mb;
 
@@ -44,7 +44,8 @@ public class AquaFrame extends JFrame implements ActionListener {
 		mb = new JMenuBar();
 		m1 = new JMenu("File");
 		m2 = new JMenu("Background");
-		m3 = new JMenu("Help");
+		m3 = new JMenu("Memento");
+		m4 = new JMenu("Help");
 		mi = new JMenuItem[names.length];
 
 		/**
@@ -69,14 +70,20 @@ public class AquaFrame extends JFrame implements ActionListener {
 		m2.add(mi[2]);
 		m2.addSeparator();
 		m2.add(mi[3]);
+		
+		// adds to Memento button
+		m3.add(mi[4]);
+		m3.addSeparator();
+		m3.add(mi[5]);
 
 		// adds to Help button
-		m3.add(mi[4]);
+		m4.add(mi[6]);
 
 		// add the general buttons to main bar
 		mb.add(m1);
 		mb.add(m2);
 		mb.add(m3);
+		mb.add(m4);
 
 		// adds the new bar to main framework
 		setJMenuBar(mb);
@@ -95,7 +102,11 @@ public class AquaFrame extends JFrame implements ActionListener {
 			panel.setBackgr(1);
 		else if (e.getSource() == mi[3])
 			panel.setBackgr(0);
-		else if (e.getSource() == mi[4])
+		else if(e.getSource() == mi[4])
+			destroy();
+		else if(e.getSource() == mi[5])
+			destroy();
+		else if (e.getSource() == mi[6])
 			printHelp();
 	}
 

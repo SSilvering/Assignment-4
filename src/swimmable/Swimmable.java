@@ -2,8 +2,10 @@ package swimmable;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.Vector;
 import java.util.concurrent.CyclicBarrier;
 
+import aquarium.Observer;
 import aquarium.SeaCreature;
 
 /**
@@ -21,19 +23,22 @@ public abstract class Swimmable extends AnimalFactory implements SeaCreature, Cl
 	protected int horSpeed;
 	protected int verSpeed;
 	protected int size;
+	protected int feedFreq;
 	protected Color col;
 	protected CyclicBarrier barrier;
+	protected Vector<Observer> list;
 
 	public Swimmable() {
 		horSpeed = 0;
 		verSpeed = 0;
 	}
 
-	public Swimmable(int hor, int ver, int size, Color col) {
+	public Swimmable(int hor, int ver, int size, Color col, int feedFreq) {
 		horSpeed = hor;
 		verSpeed = ver;
 		this.size = size;
 		this.col = col;
+		this.feedFreq = feedFreq;
 	}
 
 	public int getHorSpeed() {
@@ -71,6 +76,12 @@ public abstract class Swimmable extends AnimalFactory implements SeaCreature, Cl
 	public Color getColorRef(){
 		return col;		
 	}
+	
+	public int getFeedFreq(){
+		return feedFreq;
+	}	
+	
+	abstract public boolean checkHungry();
 	
 	abstract public void drawAnimal(Graphics g);
 

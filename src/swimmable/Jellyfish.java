@@ -26,6 +26,8 @@ public class Jellyfish extends Swimmable {
 	private int foodCount;
 	private boolean isSuspend = false;
 	private boolean isReset = false;
+	private int temp_x_dir = 0;
+	private int numTurns = 0;
 
 	/**
 	 * Constructor for initializing a new jellyfish.
@@ -42,8 +44,8 @@ public class Jellyfish extends Swimmable {
 	 *            sets the size of a fish.
 	 */
 	public Jellyfish(AquaPanel aquaPanel, Color col, int horSpeed,
-			int verSpeed, int size) {
-		super(horSpeed, verSpeed, size, col);
+			int verSpeed, int size, int feedFreq) {
+		super(horSpeed, verSpeed, size, col, feedFreq);
 		super.setName("Jellyfish");
 
 		// check if adding new fish when the board is suspended, in case and
@@ -58,6 +60,8 @@ public class Jellyfish extends Swimmable {
 		else
 			this.x_dir = 1;
 
+		temp_x_dir = x_dir;
+		
 		this.y_dir = 1;
 		this.x_front = rand.nextInt((aquaPanel.getWidth() - size) + 1) + size;
 		this.y_front = 0; // adding a new jellyfish from the top of the
@@ -74,7 +78,7 @@ public class Jellyfish extends Swimmable {
 	 * @param obj
 	 */
 	public Jellyfish(Jellyfish obj){
-		super(obj.horSpeed, obj.verSpeed, obj.size, obj.col);
+		super(obj.horSpeed, obj.verSpeed, obj.size, obj.col, obj.feedFreq);
 		super.setName("Jellyfish");
 
 		// check if adding new fish when the board is suspended, in case and
@@ -320,6 +324,13 @@ public class Jellyfish extends Swimmable {
 			// update position of the animal
 			x_front += (x_dir * horSpeed);
 			y_front += (y_dir * verSpeed);
+			
+			if (checkHungry()) {
+				synchronized (this) {
+					aquaPanel.notify("Hungry");
+					numTurns = 0;
+				}
+			}
 
 			synchronized (Jellyfish.class) {
 				aquaPanel.repaint();
@@ -330,5 +341,18 @@ public class Jellyfish extends Swimmable {
 	@Override
 	public void drawCreature(Graphics g) {
 		this.drawAnimal(g);		
-	}	
+	}
+
+	@Override
+	public boolean checkHungry() {
+		if((aquaPanel.thereIsFood() == false) && temp_x_dir != x_dir){
+			if(numTurns  < super.feedFreq)
+				numTurns++;
+			
+			temp_x_dir = x_dir;
+		}else if(numTurns == super.feedFreq)
+			return true;
+		
+		return false;
+	}		
 }

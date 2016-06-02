@@ -266,18 +266,20 @@ public class DuplicateAnimalDialog extends JDialog {
 		JButton btnUpdate = new JButton("Update & Duplicate");
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Integer num = comboBox.getSelectedIndex();
-				Swimmable cloneAnimal = (Swimmable) AnimalCache.getAnimal(num
-						.toString());
+				if (comboBox.getSelectedIndex() != -1) {
+					Integer num = comboBox.getSelectedIndex();
+					Swimmable cloneAnimal = (Swimmable) AnimalCache
+							.getAnimal(num.toString());
 
-				cloneAnimal.setColor(col);
-				cloneAnimal.setHorSpeed(horSpeed);
-				cloneAnimal.setVerSpeed(verSpeed);
-				cloneAnimal.setSize(size);
+					cloneAnimal.setColor(col);
+					cloneAnimal.setHorSpeed(horSpeed);
+					cloneAnimal.setVerSpeed(verSpeed);
+					cloneAnimal.setSize(size);
 
-				ap.addCreature(cloneAnimal);
+					ap.addCreature(cloneAnimal);
 
-				dispose();
+					dispose();
+				}
 			}
 		});
 

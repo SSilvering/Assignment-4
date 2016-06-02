@@ -33,7 +33,7 @@ import aquaContents.Worm;
  *
  */
 
-public class AquaPanel extends JPanel {
+public class AquaPanel extends JPanel implements aquarium.Observer{
 
 	private static final long serialVersionUID = 1L;
 	private AquaFrame aquaFrame;
@@ -467,6 +467,16 @@ public class AquaPanel extends JPanel {
 
 		if (isFood == true) {
 			Worm.getInstance().drawWorm(this, g);
+		}
+	}
+
+	@Override
+	public void notify(String msg) {
+		if(msg.equals("Hungry"))
+		{
+		JOptionPane.showMessageDialog(aquaFrame,
+				"Please feed us!", "Info",
+				JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 }
