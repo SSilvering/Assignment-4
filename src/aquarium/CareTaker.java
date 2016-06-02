@@ -19,6 +19,10 @@ public class CareTaker {
 	public static Memento get(int index) {
 		return Map.get(index);
 	}
+	
+	public static int getCount(){
+		return Map.size();
+	}
 
 	public static void setClear() {
 		Map.clear();

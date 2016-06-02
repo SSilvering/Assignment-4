@@ -175,6 +175,10 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 
 		this.add(Panel, BorderLayout.SOUTH);
 	}
+	
+	public void saveDialog(){
+		new SaveDialog(this, creatures);
+	}
 
 	/**
 	 * This method opening the duplicate animal dialog for duplicating an animal

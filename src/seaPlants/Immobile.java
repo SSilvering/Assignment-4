@@ -1,8 +1,10 @@
 package seaPlants;
 
+import java.awt.Color;
 import java.awt.Graphics;
 
 import aquarium.SeaCreature;
+import aquarium.Memento;
 
 /**
  * This abstract class represents common interface for plants in the aquarium.
@@ -18,6 +20,11 @@ public abstract class Immobile extends PlantFactory implements SeaCreature {
 	
 	public String toString(){
 		return name;
+	}
+	
+	public Memento saveToMemento() {
+		return new Memento(null, this, Color.GREEN, this.getSize(),
+				this.getXpos(), this.getYpos(), 0, 0);
 	}
 	
 	abstract public int getXpos();

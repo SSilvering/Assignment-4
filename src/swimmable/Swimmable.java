@@ -7,6 +7,7 @@ import java.util.concurrent.CyclicBarrier;
 
 import aquarium.Observer;
 import aquarium.SeaCreature;
+import aquarium.Memento;
 
 /**
  * This abstract class represents variety types of animals that can swim in the
@@ -27,6 +28,7 @@ public abstract class Swimmable extends AnimalFactory implements SeaCreature, Cl
 	protected Color col;
 	protected CyclicBarrier barrier;
 	protected Vector<Observer> list;
+	protected String name;
 
 	public Swimmable() {
 		horSpeed = 0;
@@ -39,6 +41,10 @@ public abstract class Swimmable extends AnimalFactory implements SeaCreature, Cl
 		this.size = size;
 		this.col = col;
 		this.feedFreq = feedFreq;
+	}
+	
+	public void setName(){
+		super.setName(name);
 	}
 
 	public int getHorSpeed() {
@@ -79,7 +85,12 @@ public abstract class Swimmable extends AnimalFactory implements SeaCreature, Cl
 	
 	public int getFeedFreq(){
 		return feedFreq;
-	}	
+	}
+	
+	public Memento saveToMemento() {
+		return new Memento(this, null, col, size, this.get_X_front(),
+				this.get_Y_front(), verSpeed, horSpeed);
+	}
 	
 	abstract public int get_X_front();
 	
