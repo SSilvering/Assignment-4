@@ -187,7 +187,7 @@ public class AquaPanel extends JPanel {
 			new DuplicateAnimalDialog(this, creatures);
 		} else {
 			JOptionPane.showMessageDialog(aquaFrame,
-					"Cannot create more than 5 animals.", "Error",
+					"Cannot duplicate animals at this moment. \nCannot be more than 5 animals in the aquarium.", "Error",
 					JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
