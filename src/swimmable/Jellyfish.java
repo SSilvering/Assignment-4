@@ -19,12 +19,10 @@ import aquarium.AquaPanel;
 public class Jellyfish extends Swimmable {
 
 	private AquaPanel aquaPanel;
-	private Color col;
 	private int x_dir;
 	private int y_dir;
 	private int x_front;
 	private int y_front;
-	private int size;
 	private int foodCount;
 	private boolean isSuspend = false;
 	private boolean isReset = false;
@@ -45,7 +43,7 @@ public class Jellyfish extends Swimmable {
 	 */
 	public Jellyfish(AquaPanel aquaPanel, Color col, int horSpeed,
 			int verSpeed, int size) {
-		super(horSpeed, verSpeed);
+		super(horSpeed, verSpeed, size, col);
 		super.setName("Jellyfish");
 
 		// check if adding new fish when the board is suspended, in case and
@@ -63,15 +61,45 @@ public class Jellyfish extends Swimmable {
 		this.y_dir = 1;
 		this.x_front = rand.nextInt((aquaPanel.getWidth() - size) + 1) + size;
 		this.y_front = 0; // adding a new jellyfish from the top of the
-							// aquarium.
+						// aquarium.
 
 		this.foodCount = 0;
-		this.col = col;
-		this.size = size;
 
 		this.aquaPanel = aquaPanel;
 	}
 
+	/**
+	 * Copy Constructor
+	 * 
+	 * @param obj
+	 */
+	public Jellyfish(Jellyfish obj){
+		super(obj.horSpeed, obj.verSpeed, obj.size, obj.col);
+		super.setName("Jellyfish");
+
+		// check if adding new fish when the board is suspended, in case and
+		// that is true and the game was suspended it avoids from the new animal
+		// to start moving
+		isSuspend = AquaPanel.AQisSuspend;
+
+		if(obj.x_dir == 1)
+			this.x_dir = -1;
+		else
+			this.x_dir = 1;
+
+		this.y_dir = obj.y_dir;
+		this.x_front = obj.x_front;
+		this.y_front = obj.y_front; // adding a new jellyfish from the top of the
+									// aquarium.
+
+		this.foodCount = 0;
+
+		this.aquaPanel = obj.aquaPanel;
+	}
+	
+	@Override
+	public Jellyfish clone(){return new Jellyfish(this);}
+	
 	/**
 	 * This method paints a jellyfish.
 	 * 
@@ -140,16 +168,6 @@ public class Jellyfish extends Swimmable {
 	@Override
 	public void setBarrier(CyclicBarrier b) {
 		super.barrier = b;
-	}
-
-	/**
-	 * This method returns the size of jellyfish.
-	 * 
-	 * @return fish's size.
-	 */
-	@Override
-	public int getSize() {
-		return size;
 	}
 
 	/**

@@ -22,12 +22,10 @@ import aquarium.AquaPanel;
 public class Fish extends Swimmable {
 
 	private AquaPanel aquaPanel;
-	private Color col;
 	private int x_dir;
 	private int y_dir;
 	private int x_front;
 	private int y_front;
-	private int size;
 	private int foodCount;
 	private boolean isSuspend = false;
 	private boolean isReset = false;
@@ -48,7 +46,7 @@ public class Fish extends Swimmable {
 	 */
 	public Fish(AquaPanel aquaPanel, Color col, int horSpeed, int verSpeed,
 			int size) {
-		super(horSpeed, verSpeed);
+		super(horSpeed, verSpeed, size, col);
 		super.setName("Fish");
 
 		// check if adding new fish when the board is suspended, in case and
@@ -68,12 +66,41 @@ public class Fish extends Swimmable {
 		this.y_front = 0; // adding a new fish from the top of the aquarium.
 
 		this.foodCount = 0;
-		this.col = col;
-		this.size = size;
 
 		this.aquaPanel = aquaPanel;
 	}
 
+	/**
+	 * Copy Constructor.
+	 * 
+	 * @param obj
+	 */
+	public Fish(Fish obj) {
+		super(obj.horSpeed, obj.verSpeed, obj.size, obj.col);
+		super.setName(obj.getName());
+
+		// check if adding new fish when the board is suspended, in case and
+		// that is true and the game was suspended it avoids from the new animal
+		// to start moving
+		isSuspend = AquaPanel.AQisSuspend;
+			
+		if(obj.x_dir == 1)
+			this.x_dir = -1;
+		else
+			this.x_dir = 1;
+		
+		this.y_dir = obj.y_dir;
+		this.x_front = obj.x_front;
+		this.y_front = obj.y_front;
+
+		this.foodCount = 0;
+
+		this.aquaPanel = obj.aquaPanel;
+	}
+
+	@Override
+	public Fish clone(){return new Fish(this);}
+	
 	/**
 	 * This method paints a fish.
 	 * 
@@ -187,14 +214,6 @@ public class Fish extends Swimmable {
 	@Override
 	public void setBarrier(CyclicBarrier b) {
 		super.barrier = b;
-	}
-
-	/**
-	 * This method returns the size of fish.
-	 */
-	@Override
-	public int getSize() {
-		return size;
 	}
 
 	/**
@@ -357,4 +376,6 @@ public class Fish extends Swimmable {
 	public void drawCreature(Graphics g) {
 		this.drawAnimal(g);	
 	}	
+
+	
 }

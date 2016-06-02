@@ -76,7 +76,7 @@ public class AquaPanel extends JPanel {
 
 		// "Add Animal" button.
 		JButton addAnimalBtn = new JButton("<html><div style='text-align: center;'>Add<br />Animal</html>");
-		addAnimalBtn.setPreferredSize(new Dimension(93, 35));
+		addAnimalBtn.setPreferredSize(new Dimension(83, 35));
 		addAnimalBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Add Animal");
@@ -87,7 +87,7 @@ public class AquaPanel extends JPanel {
 
 		// "Add Plant" button.
 		JButton addPlantBtn = new JButton("<html><div style='text-align: center;'>Add<br />Plant</html>");
-		addPlantBtn.setPreferredSize(new Dimension(93, 35));
+		addPlantBtn.setPreferredSize(new Dimension(83, 35));
 		addPlantBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Add Plant");
@@ -96,9 +96,20 @@ public class AquaPanel extends JPanel {
 		});
 		Panel.add(addPlantBtn);
 		
+		// "Duplicate Animal" button.
+		JButton dupAnimalBtn = new JButton("<html><div style='text-align: center;'>Duplicate<br />Animal</html>");
+		dupAnimalBtn.setPreferredSize(new Dimension(83, 35));
+		dupAnimalBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Duplicate Animal");
+				duplicateAnimal();
+			}
+		});
+		Panel.add(dupAnimalBtn);
+		
 		// "Sleep" button.
 		JButton sleepBtn = new JButton("Sleep");
-		sleepBtn.setPreferredSize(new Dimension(93, 35));
+		sleepBtn.setPreferredSize(new Dimension(83, 35));
 		sleepBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Sleep");
@@ -108,8 +119,8 @@ public class AquaPanel extends JPanel {
 		Panel.add(sleepBtn);
 
 		// "Wake up" button.
-		JButton wakeUpBtn = new JButton("Wake up");
-		wakeUpBtn.setPreferredSize(new Dimension(93, 35));
+		JButton wakeUpBtn = new JButton("<html><div style='text-align: center;'>Wake<br />Up</html>");
+		wakeUpBtn.setPreferredSize(new Dimension(83, 35));
 		wakeUpBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Wake UP");
@@ -120,7 +131,7 @@ public class AquaPanel extends JPanel {
 
 		// "Reset" button.
 		JButton resetBtn = new JButton("Reset");
-		resetBtn.setPreferredSize(new Dimension(93, 35));
+		resetBtn.setPreferredSize(new Dimension(83, 35));
 		resetBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Reset");
@@ -131,7 +142,7 @@ public class AquaPanel extends JPanel {
 
 		// "Food" button.
 		JButton foodBtn = new JButton("Food");
-		foodBtn.setPreferredSize(new Dimension(93, 35));
+		foodBtn.setPreferredSize(new Dimension(83, 35));
 		foodBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Food");
@@ -142,7 +153,7 @@ public class AquaPanel extends JPanel {
 
 		// "Info" button.
 		JButton infoBtn = new JButton("Info");
-		infoBtn.setPreferredSize(new Dimension(93, 35));
+		infoBtn.setPreferredSize(new Dimension(83, 35));
 		infoBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Info");
@@ -153,7 +164,7 @@ public class AquaPanel extends JPanel {
 
 		// "Exit" button.
 		JButton exitBtn = new JButton("Exit");
-		exitBtn.setPreferredSize(new Dimension(93, 35));
+		exitBtn.setPreferredSize(new Dimension(83, 35));
 		exitBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Exit");
@@ -163,6 +174,22 @@ public class AquaPanel extends JPanel {
 		Panel.add(exitBtn);
 
 		this.add(Panel, BorderLayout.SOUTH);
+	}
+
+	/**
+	 * This method opening the duplicate animal dialog for duplicating an animal
+	 * that already in the aquarium. It checks for the number of animals in the
+	 * aquarium, if less than 5, duplicate animal dialog will open, otherwise
+	 * appropriate message will appear.
+	 */
+	private void duplicateAnimal() {
+		if (animalsCount < 5) {
+			new DuplicateAnimalDialog(this, creatures);
+		} else {
+			JOptionPane.showMessageDialog(aquaFrame,
+					"Cannot create more than 5 animals.", "Error",
+					JOptionPane.INFORMATION_MESSAGE);
+		}
 	}
 
 	/**
@@ -181,6 +208,7 @@ public class AquaPanel extends JPanel {
 
 			ITE = creatures.iterator();
 			while (ITE.hasNext()) {
+				try{
 				Swimmable cur = (Swimmable) ITE.next();
 
 				model.addRow(new Object[] { cur.getAnimalName(),
@@ -188,6 +216,7 @@ public class AquaPanel extends JPanel {
 						cur.getVerSpeed(), cur.getEatCount() });
 
 				totalFood += cur.getEatCount();
+				} catch (ClassCastException ex){}
 			}
 			model.addRow(new Object[] { "Total:", "", "", "", "", totalFood });
 
@@ -340,10 +369,9 @@ public class AquaPanel extends JPanel {
 	 * This method adds a new creature to the aquarium.
 	 * 
 	 * @param sc
-	 *            gets a seacreature instance for adding to the panel.
+	 *            gets a SeaCreature instance for adding to the panel.
 	 */
 	protected void addCreature(SeaCreature sc) {
-
 		if (sc.toString().equals("Zostera")
 				|| sc.toString().equals("Laminaria")) {
 			creatures.add(sc);
