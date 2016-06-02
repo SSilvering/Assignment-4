@@ -81,6 +81,14 @@ public abstract class Swimmable extends AnimalFactory implements SeaCreature, Cl
 		return feedFreq;
 	}	
 	
+	abstract public int get_X_front();
+	
+	abstract public int get_Y_front();
+	
+	abstract public void set_X_front(int x);
+	
+	abstract public void set_Y_front(int y); 
+	
 	abstract public boolean checkHungry();
 	
 	abstract public void drawAnimal(Graphics g);

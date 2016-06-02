@@ -58,4 +58,29 @@ public class Zostera extends Immobile {
 	public void drawCreature(Graphics g) {
 		this.draw(g);
 	}
+
+	@Override
+	public int getXpos() {
+		return x;
+	}
+
+	@Override
+	public int getYpos() {
+		return y;
+	}
+
+	@Override
+	public int getSize() {
+		return size;
+	}
+
+	@Override
+	public void setXpos(int x) {
+		this.x = x;		
+	}
+
+	@Override
+	public void setYPos(int y) {
+		this.y = y;		
+	}
 }

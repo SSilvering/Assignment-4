@@ -399,5 +399,25 @@ public class Fish extends Swimmable {
 			return true;
 		
 		return false;
+	}
+
+	@Override
+	public int get_X_front() {
+		return x_front;
+	}
+
+	@Override
+	public int get_Y_front() {
+		return y_front;
+	}
+
+	@Override
+	public void set_X_front(int x) {
+		this.x_front = x;		
+	}
+
+	@Override
+	public void set_Y_front(int y) {
+		this.y_front = y;		
 	}		
 }

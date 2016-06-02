@@ -302,6 +302,8 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 			img = null;
 		this.repaint();
 		this.setBackground(Color.WHITE);
+		
+		CareTaker.setClear();
 	}
 
 	/**
