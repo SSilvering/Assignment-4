@@ -1,5 +1,6 @@
 package aquarium;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 
 /**
@@ -8,7 +9,7 @@ import java.util.Hashtable;
  *
  */
 
-public class CareTaker {
+public class Caretaker {
 
 	private static Hashtable<String, Memento> Map = new Hashtable<String, Memento>();
 	
@@ -27,4 +28,15 @@ public class CareTaker {
 	public static void setClear() {
 		Map.clear();
 	}
+	
+	public static boolean containsKey(String key){
+		if(Map.containsKey(key))
+			return true;
+		
+		return false;
+	}
+	
+	public static ArrayList<Memento> toList(){
+		return new ArrayList<Memento>(Map.values());
+	}	
 }

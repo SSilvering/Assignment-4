@@ -78,4 +78,9 @@ public class Laminaria extends Immobile {
 	public void setYPos(int y) {
 		this.y = y;		
 	}
+
+	@Override
+	public void setSize(int size) {
+		this.size = size;		
+	}
 }

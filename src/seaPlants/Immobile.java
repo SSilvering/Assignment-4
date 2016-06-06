@@ -2,6 +2,7 @@ package seaPlants;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.UUID;
 
 import aquarium.SeaCreature;
 import aquarium.Memento;
@@ -15,6 +16,7 @@ import aquarium.Memento;
 public abstract class Immobile extends PlantFactory implements SeaCreature {
 
 	String name;
+	public final String uid = UUID.randomUUID().toString(); // generate unique id to specific instance.
 	
 	public abstract void drawCreature(Graphics g);
 	
@@ -27,6 +29,15 @@ public abstract class Immobile extends PlantFactory implements SeaCreature {
 				this.getXpos(), this.getYpos(), 0, 0);
 	}
 	
+	/**
+	 * This method returns the unique id of specific instance.
+	 * 
+	 * @return the unique id of the instance.
+	 */
+	public String getUID(){
+		return uid;
+	}
+	
 	abstract public int getXpos();
 	
 	abstract public int getYpos();
@@ -36,4 +47,6 @@ public abstract class Immobile extends PlantFactory implements SeaCreature {
 	abstract public void setXpos(int x);
 	
 	abstract public void setYPos(int y);
+	
+	abstract public void setSize(int size);
 }

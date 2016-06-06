@@ -105,7 +105,7 @@ public class AquaFrame extends JFrame implements ActionListener {
 		else if(e.getSource() == mi[4])
 			panel.saveDialog();
 		else if(e.getSource() == mi[5])
-			destroy(); // TODO change it
+			panel.restoreDialog();
 		else if (e.getSource() == mi[6])
 			printHelp();
 	}

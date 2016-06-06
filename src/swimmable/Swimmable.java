@@ -2,6 +2,7 @@ package swimmable;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.UUID;
 import java.util.Vector;
 import java.util.concurrent.CyclicBarrier;
 
@@ -27,8 +28,9 @@ public abstract class Swimmable extends AnimalFactory implements SeaCreature, Cl
 	protected int feedFreq;
 	protected Color col;
 	protected CyclicBarrier barrier;
-	protected Vector<Observer> list;
-	protected String name;
+	public final String uid = UUID.randomUUID().toString(); // generate unique id to specific instance.
+	protected Vector<Observer> list; // list of observers. In practice we have
+										// only one it AquaPanel
 
 	public Swimmable() {
 		horSpeed = 0;
@@ -43,8 +45,13 @@ public abstract class Swimmable extends AnimalFactory implements SeaCreature, Cl
 		this.feedFreq = feedFreq;
 	}
 	
-	public void setName(){
-		super.setName(name);
+	/**
+	 * This method returns the unique id of specific instance.
+	 * 
+	 * @return the unique id of the instance.
+	 */
+	public String getUID(){
+		return uid;
 	}
 
 	public int getHorSpeed() {
@@ -64,7 +71,7 @@ public abstract class Swimmable extends AnimalFactory implements SeaCreature, Cl
 	}
 
 	public String getAnimalName(){
-		return super.getName();
+		return super.toString();
 	}
 	
 	public void setColor(Color col){

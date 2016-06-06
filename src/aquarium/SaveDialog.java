@@ -15,17 +15,21 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextPane;
-import javax.swing.SwingConstants;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.SwingConstants;
 
-import swimmable.*;
-import seaPlants.*;
-import aquarium.CareTaker;
+import seaPlants.Immobile;
+import swimmable.Swimmable;
 /**
+ * This class represent the save dialog for saving creature state.
  * 
  * @author Shai Hod, ID: 304800402
- *
+ * 
+ * @see Memento
+ * @see Caretaker
+ * @see RestoreDialog
  */
 
 public class SaveDialog extends JDialog{
@@ -39,12 +43,11 @@ public class SaveDialog extends JDialog{
 	private JTextPane textVerSpeed;
 	private JTextPane textHorSpeed;
 	private JComboBox<SeaCreature> comboBox = new JComboBox<SeaCreature>();
-	private AquaPanel ap;
 	private HashSet<SeaCreature> creatures;
 	private Iterator<SeaCreature> ITE;
+	private Object obj;
 
 	public SaveDialog(AquaPanel ap, HashSet<SeaCreature> creatures){
-		this.ap = ap;
 		this.creatures = creatures;
 		fillCB();
 		
@@ -58,67 +61,105 @@ public class SaveDialog extends JDialog{
 		this.setSize(new Dimension(330, 350));
 		this.setLocationRelativeTo(ap);
 		this.setVisible(true);
-		
-
-	}
-	
+	}	
 	
 	private void fillCB() {
 		ITE = creatures.iterator();
 		while (ITE.hasNext()) {
 			try {
-				comboBox.addItem((SeaCreature)ITE.next());
+				comboBox.addItem(ITE.next());
 			} catch (ClassCastException ex) {
 			}
-		}		
-	}
+		}
 
+		comboBox.setSelectedIndex(-1);
+	}
+	
+	private void dispValues(Object obj){
+		if(obj instanceof Swimmable){
+			
+			textType.setText(((Swimmable)obj).getName());
+			textSize.setText(Integer.toString(((Swimmable)obj).getSize()));
+			textColor.setText(((Swimmable)obj).getColor());
+			textXPos.setText(Integer.toString(((Swimmable)obj).get_X_front()));
+			textYPos.setText(Integer.toString(((Swimmable)obj).get_Y_front()));
+			textVerSpeed.setText(Integer.toString(((Swimmable)obj).getVerSpeed()));
+			textHorSpeed.setText(Integer.toString(((Swimmable)obj).getHorSpeed()));
+			
+		}else if(obj instanceof Immobile){
+			
+			textType.setText(((Immobile)obj).toString());
+			textSize.setText(Integer.toString(((Immobile)obj).getSize()));
+			textColor.setText(AquaPanel.ColorName(Color.GREEN));
+			textXPos.setText(Integer.toString(((Immobile)obj).getXpos()));
+			textYPos.setText(Integer.toString(((Immobile)obj).getYpos()));
+			textVerSpeed.setText("0");
+			textHorSpeed.setText("0");
+			
+		}
+	}
 
 	private void initialize() {
 		this.setTitle("Save Creature State");
-		this.setBounds(100, 100, 512, 284);
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		
 		
 		comboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Object obj = comboBox.getSelectedItem();
-				if(obj instanceof Swimmable){
-					
-					textType.setText(((Swimmable)obj).getName());
-					textSize.setText(Integer.toString(((Swimmable)obj).getSize()));
-					textColor.setText(((Swimmable)obj).getColor());
-					textXPos.setText(Integer.toString(((Swimmable)obj).get_X_front()));
-					textYPos.setText(Integer.toString(((Swimmable)obj).get_Y_front()));
-					textVerSpeed.setText(Integer.toString(((Swimmable)obj).getVerSpeed()));
-					textHorSpeed.setText(Integer.toString(((Swimmable)obj).getHorSpeed()));
-					
-				}else if(obj instanceof Immobile){
-					
-					textType.setText(((Immobile)obj).toString());
-					textSize.setText(Integer.toString(((Immobile)obj).getSize()));
-					textColor.setText(AquaPanel.ColorName(Color.GREEN));
-					textXPos.setText(Integer.toString(((Immobile)obj).getXpos()));
-					textYPos.setText(Integer.toString(((Immobile)obj).getYpos()));
-					textVerSpeed.setText("0");
-					textHorSpeed.setText("0");
-					
-				}
+				obj = comboBox.getSelectedItem();
+				dispValues(obj);
 			}
 		});
 		
 		JButton btnSave = new JButton("Save State");
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Object obj = comboBox.getSelectedItem();
-				if(obj instanceof Swimmable){
-					
-					CareTaker.add(Integer.toString((CareTaker.getCount() + 1)), ((Swimmable)obj).saveToMemento());
-					
-				}else if(obj instanceof Immobile){
 
-					CareTaker.add(Integer.toString((CareTaker.getCount() + 1)), ((Immobile)obj).saveToMemento());					
-					
+				if (obj instanceof Swimmable) {
+
+					// check if instance state already saved.
+					if (Caretaker.containsKey(((Swimmable) obj).getUID())) {
+						Caretaker.add(((Swimmable) obj).getUID(),
+								((Swimmable) obj).saveToMemento());
+
+						JOptionPane.showMessageDialog(new JDialog(),
+								"Animal Updated.", "Info",
+								JOptionPane.INFORMATION_MESSAGE);
+
+						dispose();
+					} else {
+						Caretaker.add(((Swimmable) obj).getUID(),
+								((Swimmable) obj).saveToMemento());
+
+						JOptionPane.showMessageDialog(new JDialog(),
+								"Animal State Saved.", "Info",
+								JOptionPane.INFORMATION_MESSAGE);
+
+						dispose();
+					}
+
+				} else if (obj instanceof Immobile) {
+
+					// check if instance state already saved.
+					if (Caretaker.containsKey(((Immobile) obj).getUID())) {
+						Caretaker.add(((Immobile) obj).getUID(),
+								((Immobile) obj).saveToMemento());
+
+						JOptionPane.showMessageDialog(new JDialog(),
+								"Plant Updated.", "Info",
+								JOptionPane.INFORMATION_MESSAGE);
+
+						dispose();
+					} else {
+						Caretaker.add(((Immobile) obj).getUID(),
+								((Immobile) obj).saveToMemento());
+
+						JOptionPane.showMessageDialog(new JDialog(),
+								"Plant State Saved.", "Info",
+								JOptionPane.INFORMATION_MESSAGE);
+
+						dispose();
+					}
 				}
 			}
 		});

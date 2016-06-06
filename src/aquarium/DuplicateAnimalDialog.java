@@ -60,14 +60,7 @@ public class DuplicateAnimalDialog extends JDialog {
 	private JComboBox<Swimmable> comboBox;
 	private JComboBox<String> colorComboBox;
 
-	/**
-	 * 
-	 * @param ap
-	 * @param creatures
-	 * @param size
-	 * @param horSpeed
-	 * @param verSpeed
-	 */
+
 	public DuplicateAnimalDialog(AquaPanel ap, HashSet<SeaCreature> creatures) {
 		this.ap = ap;
 		this.creatures = creatures;

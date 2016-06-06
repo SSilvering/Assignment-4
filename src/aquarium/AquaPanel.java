@@ -176,8 +176,30 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 		this.add(Panel, BorderLayout.SOUTH);
 	}
 	
+	public int getAnimalCount(){
+		return animalsCount;
+	}
+	
+	public int getPlantCount(){
+		return plantsCount;
+	}
+	
+	/**
+	 * This method opens the saving state dialog for saving state of animal or plant.
+	 */
 	public void saveDialog(){
+		animalSleep(); // hold animals for saving specific moment.
+		
 		new SaveDialog(this, creatures);
+		
+		animalWakeup(); // release animals from holding.
+	}
+	
+	/**
+	 * This method opens the restore dialog for restoring state of animal or plant.
+	 */
+	public void restoreDialog() {
+		new RestoreDialog(this);
 	}
 
 	/**
@@ -307,7 +329,7 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 		this.repaint();
 		this.setBackground(Color.WHITE);
 		
-		CareTaker.setClear();
+		//Caretaker.setClear();
 	}
 
 	/**
@@ -380,14 +402,20 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 	protected void addCreature(SeaCreature sc) {
 		if (sc.toString().equals("Zostera")
 				|| sc.toString().equals("Laminaria")) {
-			creatures.add(sc);
-			plantsCount++;
+			
+			if(creatures.contains(sc) == false){
+				creatures.add(sc);
+				plantsCount++;
+			}
+			
 			this.repaint();
 		} else {
 			try {
-				creatures.add(sc);
-				((Thread) sc).start();
-				animalsCount++;
+				if (creatures.contains(sc) == false) {
+					creatures.add(sc);
+					((Thread) sc).start();
+					animalsCount++;
+				}
 			} catch (ClassCastException ex) {
 				JOptionPane.showMessageDialog(aquaFrame,
 						"Cannot continue right now.", "Error",
