@@ -48,6 +48,8 @@ public class Fish extends Swimmable {
 	 *            gets the vertical speed of the current fish.
 	 * @param size
 	 *            gets the size of a fish.
+	 * @param feedFreq
+	 *            gets frequency of feeding for a specific fish.
 	 */
 	public Fish(AquaPanel aquaPanel, Color col, int horSpeed, int verSpeed,
 			int size, int feedFreq) {
@@ -82,6 +84,7 @@ public class Fish extends Swimmable {
 	 * Copy Constructor.
 	 * 
 	 * @param obj
+	 *            gets reference to object which going to be copied.
 	 */
 	public Fish(Fish obj) {
 		super(obj.horSpeed, obj.verSpeed, obj.size, obj.col, obj.feedFreq);

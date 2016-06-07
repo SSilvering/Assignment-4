@@ -45,6 +45,8 @@ public class Jellyfish extends Swimmable {
 	 *            sets the vertical speed of the current jellyfish.
 	 * @param size
 	 *            sets the size of a fish.
+	 * @param feedFreq
+	 *            gets frequency of feeding for a specific fish.
 	 */
 	public Jellyfish(AquaPanel aquaPanel, Color col, int horSpeed,
 			int verSpeed, int size, int feedFreq) {
@@ -80,6 +82,7 @@ public class Jellyfish extends Swimmable {
 	 * Copy Constructor
 	 * 
 	 * @param obj
+	 *            gets reference to object which going to be copied.
 	 */
 	public Jellyfish(Jellyfish obj) {
 		super(obj.horSpeed, obj.verSpeed, obj.size, obj.col, obj.feedFreq);

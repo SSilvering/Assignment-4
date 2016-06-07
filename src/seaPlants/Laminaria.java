@@ -17,10 +17,14 @@ public class Laminaria extends Immobile {
 	private int size;
 
 	/**
+	 * General Contractor of plant type of Laminaria.
 	 * 
 	 * @param x
+	 *            x-position of plant.
 	 * @param y
+	 *            y-position of plant.
 	 * @param size
+	 *            size of plant.
 	 */
 	public Laminaria(int x, int y, int size){
 		super.name = "Laminaria";
