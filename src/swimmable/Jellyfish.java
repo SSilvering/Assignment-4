@@ -7,6 +7,9 @@ import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
 import aquarium.AquaPanel;
+import aquarium.HungerState;
+import aquarium.Hungry;
+import aquarium.Satiated;
 
 /**
  * This class represents a single jellyfish.
@@ -62,11 +65,11 @@ public class Jellyfish extends Swimmable {
 			this.x_dir = 1;
 
 		temp_x_dir = x_dir;
-		
+
 		this.y_dir = 1;
 		this.x_front = rand.nextInt((aquaPanel.getWidth() - size) + 1) + size;
 		this.y_front = 0; // adding a new jellyfish from the top of the
-						// aquarium.
+							// aquarium.
 
 		this.foodCount = 0;
 
@@ -78,7 +81,7 @@ public class Jellyfish extends Swimmable {
 	 * 
 	 * @param obj
 	 */
-	public Jellyfish(Jellyfish obj){
+	public Jellyfish(Jellyfish obj) {
 		super(obj.horSpeed, obj.verSpeed, obj.size, obj.col, obj.feedFreq);
 		super.setName("Jellyfish");
 
@@ -87,24 +90,27 @@ public class Jellyfish extends Swimmable {
 		// to start moving
 		isSuspend = AquaPanel.AQisSuspend;
 
-		if(obj.x_dir == 1)
+		if (obj.x_dir == 1)
 			this.x_dir = -1;
 		else
 			this.x_dir = 1;
 
 		this.y_dir = obj.y_dir;
 		this.x_front = obj.x_front;
-		this.y_front = obj.y_front; // adding a new jellyfish from the top of the
+		this.y_front = obj.y_front; // adding a new jellyfish from the top of
+									// the
 									// aquarium.
 
 		this.foodCount = 0;
 
 		this.aquaPanel = obj.aquaPanel;
 	}
-	
+
 	@Override
-	public Jellyfish clone(){return new Jellyfish(this);}
-	
+	public Jellyfish clone() {
+		return new Jellyfish(this);
+	}
+
 	/**
 	 * This method paints a jellyfish.
 	 * 
@@ -271,7 +277,7 @@ public class Jellyfish extends Swimmable {
 		while (true) {
 			try {
 				synchronized (this) {
-					sleep(50);
+					sleep(40);
 				}
 
 				if (isSuspend == true) {
@@ -297,22 +303,31 @@ public class Jellyfish extends Swimmable {
 						barrier.await();
 					}
 
-					toCenter(); // change the swim direction of fish to the
-								// panel center
+					if (super.state.toString().equals("Hungry"))
+
+						toCenter(); // change the swim direction of jellyfish to the
+									// panel center.
 
 					// check if the fish nears to food in less from 7 pixels
-					if ((Math.abs(x_front - aquaPanel.getWidth() / 2) <= 7)
+					if (super.state.toString().equals("Hungry")
+							&& (Math.abs(x_front - aquaPanel.getWidth() / 2) <= 7)
 							&& (Math.abs(y_front - aquaPanel.getHeight() / 2) <= 7)) {
 						synchronized (this) {
 							aquaPanel.ateFood(this);
+							numTurns = 0;
+
+							Satiated satiated = new Satiated();
+							satiated.action(this);
+
 							notify();
 						}
 					}
 
 				} else {
-					jellyfishMoveBound(); // boundaries for the movement of the
-											// fish
+					jellyfishMoveBound(); // boundaries for the movement of the jellyfish.
 				}
+				
+				jellyfishMoveBound(); // boundaries for the movement of the jellyfish.
 
 			} catch (InterruptedException e) {
 				e.printStackTrace();
@@ -325,11 +340,21 @@ public class Jellyfish extends Swimmable {
 			// update position of the animal
 			x_front += (x_dir * horSpeed);
 			y_front += (y_dir * verSpeed);
-			
+
 			if (checkHungry()) {
 				synchronized (this) {
-					aquaPanel.notify("Hungry");
-					numTurns = 0;
+					HungerState oldState = super.state;
+
+					Hungry hungry = new Hungry();
+					hungry.action(this);
+
+					super.stopCheck = true; // prevent counting turns while animal goes to the center. 
+
+					if (super.stopCheck == true
+							&& oldState.toString().equals("Satiated")) {
+						aquaPanel.notify("Hungry");
+						numTurns = 0;
+					}
 				}
 			}
 
@@ -341,19 +366,23 @@ public class Jellyfish extends Swimmable {
 
 	@Override
 	public void drawCreature(Graphics g) {
-		this.drawAnimal(g);		
+		this.drawAnimal(g);
 	}
 
 	@Override
 	public boolean checkHungry() {
-		if((aquaPanel.thereIsFood() == false) && temp_x_dir != x_dir){
-			if(numTurns  < super.feedFreq)
-				numTurns++;
-			
-			temp_x_dir = x_dir;
-		}else if(numTurns == super.feedFreq)
-			return true;
-		
+		if (super.stopCheck == false) {
+			if (temp_x_dir != x_dir) {
+				if (numTurns < super.feedFreq)
+					++numTurns;
+
+				temp_x_dir = x_dir;
+			}
+
+			if (numTurns == super.feedFreq)
+				return true;
+		}
+
 		return false;
 	}
 
@@ -370,11 +399,11 @@ public class Jellyfish extends Swimmable {
 	@Override
 	public void set_X_front(int x) {
 		this.x_front = x;
-		
+
 	}
 
 	@Override
 	public void set_Y_front(int y) {
-		this.y_front = y;		
-	}	
+		this.y_front = y;
+	}
 }

@@ -6,7 +6,9 @@ import java.util.UUID;
 import java.util.Vector;
 import java.util.concurrent.CyclicBarrier;
 
+import aquarium.HungerState;
 import aquarium.Observer;
+import aquarium.Satiated;
 import aquarium.SeaCreature;
 import aquarium.Memento;
 
@@ -23,12 +25,14 @@ import aquarium.Memento;
 public abstract class Swimmable extends AnimalFactory implements SeaCreature, Cloneable {
 
 	private final String uid = UUID.randomUUID().toString(); // generate unique id to specific instance.
+	protected HungerState state;
 	protected int horSpeed;
 	protected int verSpeed;
 	protected int size;
 	protected int feedFreq;
 	protected String name;
 	protected Color col;
+	protected boolean stopCheck = false;
 	protected CyclicBarrier barrier;
 	protected Vector<Observer> list; // List of observers. In practice we have
 										// only one observer it AquaPanel.
@@ -44,6 +48,19 @@ public abstract class Swimmable extends AnimalFactory implements SeaCreature, Cl
 		this.size = size;
 		this.col = col;
 		this.feedFreq = feedFreq;
+		
+		Satiated satiated = new Satiated();
+		satiated.action(this);
+	}
+	
+	/**
+	 * This method change animal's hunger state.
+	 * 
+	 * @param state
+	 *            A specific state for assignment.
+	 */
+	public void setHungerState(HungerState state){
+		this.state = state;
 	}
 	
 	/**
@@ -55,6 +72,10 @@ public abstract class Swimmable extends AnimalFactory implements SeaCreature, Cl
 		return uid;
 	}
 
+	public void setStopCheck(boolean bool){
+		this.stopCheck = bool;
+	}
+	
 	public int getHorSpeed() {
 		return horSpeed;
 	}

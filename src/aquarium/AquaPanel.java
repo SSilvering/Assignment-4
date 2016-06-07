@@ -303,6 +303,15 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 		synchronized (this) {
 			anim.eatInc(); // increments the food counter of a specific animal.
 			isFood = false;
+			
+			// after callback, allows checking of counting turns again.
+			ITE = creatures.iterator();
+			while (ITE.hasNext()) {
+				try {
+					((Swimmable) ITE.next()).setStopCheck(false);
+				} catch (ClassCastException ex) {
+				}
+			}			
 		}
 	}
 
@@ -328,8 +337,6 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 			img = null;
 		this.repaint();
 		this.setBackground(Color.WHITE);
-		
-		//Caretaker.setClear();
 	}
 
 	/**
