@@ -23,7 +23,7 @@ import javax.swing.SwingConstants;
 import seaPlants.Immobile;
 import swimmable.Swimmable;
 /**
- * This class represent the save dialog for saving creature state.
+ * This class represents the save dialog for saving creature state.
  * 
  * @author Shai Hod, ID: 304800402
  * 
@@ -126,16 +126,14 @@ public class SaveDialog extends JDialog{
 								"Animal Updated.", "Info",
 								JOptionPane.INFORMATION_MESSAGE);
 
-						dispose();
+						
 					} else {
 						Caretaker.add(((Swimmable) obj).getUID(),
 								((Swimmable) obj).saveToMemento());
 
 						JOptionPane.showMessageDialog(new JDialog(),
 								"Animal State Saved.", "Info",
-								JOptionPane.INFORMATION_MESSAGE);
-
-						dispose();
+								JOptionPane.INFORMATION_MESSAGE);						
 					}
 
 				} else if (obj instanceof Immobile) {
@@ -148,8 +146,6 @@ public class SaveDialog extends JDialog{
 						JOptionPane.showMessageDialog(new JDialog(),
 								"Plant Updated.", "Info",
 								JOptionPane.INFORMATION_MESSAGE);
-
-						dispose();
 					} else {
 						Caretaker.add(((Immobile) obj).getUID(),
 								((Immobile) obj).saveToMemento());
@@ -157,10 +153,10 @@ public class SaveDialog extends JDialog{
 						JOptionPane.showMessageDialog(new JDialog(),
 								"Plant State Saved.", "Info",
 								JOptionPane.INFORMATION_MESSAGE);
-
-						dispose();
 					}
 				}
+				
+				dispose();
 			}
 		});
 		

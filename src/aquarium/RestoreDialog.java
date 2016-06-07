@@ -13,12 +13,23 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
 
 import seaPlants.Immobile;
 import swimmable.Swimmable;
+
+/**
+ * This class represents the restore dialog for saving creature state.
+ * 
+ * @author Shai Hod, ID: 304800402
+ *
+ * @see Memento
+ * @see Caretaker
+ * @see RestoreDialog
+ */
 
 public class RestoreDialog extends JDialog{
 
@@ -104,14 +115,28 @@ public class RestoreDialog extends JDialog{
 						animal.set_Y_front(((Memento)obj).getYpos());
 						animal.setColor(((Memento)obj).getColor());
 						
-						ap.addCreature(animal); //TODO problem need to be solved
+						if(ap.ifContains(animal) == false){
+							ap.addCreature((SeaCreature) animal.clone());
+							Caretaker.removeItem(animal.getUID()); // remove old instance from hashtable
+						}
+						
+						JOptionPane.showMessageDialog(new JDialog(),
+								"State Restored.", "Info",
+								JOptionPane.INFORMATION_MESSAGE);
+						
 					}else{
 						Immobile plant = ((Memento)obj).getPlant();
 						plant.setXpos(((Memento)obj).getXpos());
 						plant.setYPos(((Memento)obj).getYpos());
 						plant.setSize(((Memento)obj).getSize());
-						ap.addCreature(plant);
+						ap.addCreature(plant); // existence check is carried out from AquaPanel.
+						
+						JOptionPane.showMessageDialog(new JDialog(),
+								"State Restored.", "Info",
+								JOptionPane.INFORMATION_MESSAGE);
 					}
+					
+					dispose();
 				}
 				
 			}

@@ -423,6 +423,13 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 			}
 		}
 	}
+	
+	public boolean ifContains(Object obj){
+		if(creatures.contains(obj))
+			return true;
+		
+		return false;
+	}
 
 	/**
 	 * This method sets a background to main framework.

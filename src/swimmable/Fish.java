@@ -49,7 +49,8 @@ public class Fish extends Swimmable {
 	public Fish(AquaPanel aquaPanel, Color col, int horSpeed, int verSpeed,
 			int size, int feedFreq) {
 		super(horSpeed, verSpeed, size, col, feedFreq);
-		super.setName("Fish");
+		super.name = "Fish";
+		super.setName(name);
 
 		// check if adding new fish when the board is suspended, in case and
 		// that is true and the game was suspended it avoids from the new animal

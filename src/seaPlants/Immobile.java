@@ -15,8 +15,8 @@ import aquarium.Memento;
 
 public abstract class Immobile extends PlantFactory implements SeaCreature {
 
+	private final String uid = UUID.randomUUID().toString(); // generate unique id to specific instance.
 	String name;
-	public final String uid = UUID.randomUUID().toString(); // generate unique id to specific instance.
 	
 	public abstract void drawCreature(Graphics g);
 	

@@ -22,15 +22,16 @@ import aquarium.Memento;
 
 public abstract class Swimmable extends AnimalFactory implements SeaCreature, Cloneable {
 
+	private final String uid = UUID.randomUUID().toString(); // generate unique id to specific instance.
 	protected int horSpeed;
 	protected int verSpeed;
 	protected int size;
 	protected int feedFreq;
+	protected String name;
 	protected Color col;
 	protected CyclicBarrier barrier;
-	public final String uid = UUID.randomUUID().toString(); // generate unique id to specific instance.
-	protected Vector<Observer> list; // list of observers. In practice we have
-										// only one it AquaPanel
+	protected Vector<Observer> list; // List of observers. In practice we have
+										// only one observer it AquaPanel.
 
 	public Swimmable() {
 		horSpeed = 0;
@@ -71,7 +72,7 @@ public abstract class Swimmable extends AnimalFactory implements SeaCreature, Cl
 	}
 
 	public String getAnimalName(){
-		return super.toString();
+		return name;
 	}
 	
 	public void setColor(Color col){

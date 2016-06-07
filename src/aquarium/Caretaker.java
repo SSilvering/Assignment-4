@@ -4,9 +4,13 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 
 /**
+ * This class represents a cache for saves and restores creature state.
  * 
  * @author Shai Hod, ID: 304800402
- *
+ * 
+ * @see SaveDialog
+ * @see RestoreDialog
+ * @see Memento
  */
 
 public class Caretaker {
@@ -38,5 +42,9 @@ public class Caretaker {
 	
 	public static ArrayList<Memento> toList(){
 		return new ArrayList<Memento>(Map.values());
-	}	
+	}
+	
+	public static void removeItem(String uid){
+		Map.remove(uid);
+	}
 }

@@ -6,9 +6,13 @@ import seaPlants.Immobile;
 import swimmable.Swimmable;
 
 /**
+ * This class represents an object containing the current state of creature.
  * 
  * @author Shai Hod, ID: 304800402
- *
+ * 
+ * @see Caretaker
+ * @see RestoreDialog
+ * @see SaveDialog
  */
 
 public class Memento {
