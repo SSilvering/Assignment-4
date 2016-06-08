@@ -45,6 +45,8 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 	private boolean infoClicked = false;
 	private int animalsCount = 0;
 	private int plantsCount = 0;
+	private JPanelDecorator JPD;
+	public static boolean ifPressed = false;
 	public static boolean AQisSuspend = false;
 
 	/**
@@ -76,7 +78,7 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 
 		// "Add Animal" button.
 		JButton addAnimalBtn = new JButton("<html><div style='text-align: center;'>Add<br />Animal</html>");
-		addAnimalBtn.setPreferredSize(new Dimension(83, 35));
+		addAnimalBtn.setPreferredSize(new Dimension(74, 35));
 		addAnimalBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Add Animal");
@@ -87,7 +89,7 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 
 		// "Add Plant" button.
 		JButton addPlantBtn = new JButton("<html><div style='text-align: center;'>Add<br />Plant</html>");
-		addPlantBtn.setPreferredSize(new Dimension(83, 35));
+		addPlantBtn.setPreferredSize(new Dimension(74, 35));
 		addPlantBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Add Plant");
@@ -98,7 +100,7 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 		
 		// "Duplicate Animal" button.
 		JButton dupAnimalBtn = new JButton("<html><div style='text-align: center;'>Duplicate<br />Animal</html>");
-		dupAnimalBtn.setPreferredSize(new Dimension(83, 35));
+		dupAnimalBtn.setPreferredSize(new Dimension(74, 35));
 		dupAnimalBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Duplicate Animal");
@@ -107,9 +109,20 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 		});
 		Panel.add(dupAnimalBtn);
 		
+		// "Decorator" button
+		JButton decoratorBtn = new JButton("<html><div style='text-align: center;'>Decorator<br /></html>");
+		decoratorBtn.setPreferredSize(new Dimension(78, 35));
+		decoratorBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Decorate Animal");
+				decorateAnimal();
+			}
+		});
+		Panel.add(decoratorBtn);
+		
 		// "Sleep" button.
 		JButton sleepBtn = new JButton("Sleep");
-		sleepBtn.setPreferredSize(new Dimension(83, 35));
+		sleepBtn.setPreferredSize(new Dimension(74, 35));
 		sleepBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Sleep");
@@ -120,7 +133,7 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 
 		// "Wake up" button.
 		JButton wakeUpBtn = new JButton("<html><div style='text-align: center;'>Wake<br />Up</html>");
-		wakeUpBtn.setPreferredSize(new Dimension(83, 35));
+		wakeUpBtn.setPreferredSize(new Dimension(74, 35));
 		wakeUpBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Wake UP");
@@ -131,7 +144,7 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 
 		// "Reset" button.
 		JButton resetBtn = new JButton("Reset");
-		resetBtn.setPreferredSize(new Dimension(83, 35));
+		resetBtn.setPreferredSize(new Dimension(74, 35));
 		resetBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Reset");
@@ -142,7 +155,7 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 
 		// "Food" button.
 		JButton foodBtn = new JButton("Food");
-		foodBtn.setPreferredSize(new Dimension(83, 35));
+		foodBtn.setPreferredSize(new Dimension(74, 35));
 		foodBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Food");
@@ -153,7 +166,7 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 
 		// "Info" button.
 		JButton infoBtn = new JButton("Info");
-		infoBtn.setPreferredSize(new Dimension(83, 35));
+		infoBtn.setPreferredSize(new Dimension(74, 35));
 		infoBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Info");
@@ -164,7 +177,7 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 
 		// "Exit" button.
 		JButton exitBtn = new JButton("Exit");
-		exitBtn.setPreferredSize(new Dimension(83, 35));
+		exitBtn.setPreferredSize(new Dimension(74, 35));
 		exitBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Exit");
@@ -176,6 +189,33 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 		this.add(Panel, BorderLayout.SOUTH);
 	}
 	
+	/**
+	 *
+	 */
+	public void decorateAnimal() {
+		ifPressed = !ifPressed;
+		
+		if (animalsCount != 0) {
+			
+			if (ifPressed) {
+				JPD = new JPanelDecorator(this, creatures);
+				add(JPD);
+			} else {
+				JPD.dispose();
+			}
+			
+		} else 
+		{
+			JOptionPane.showMessageDialog(this, "No animals in the aquarium.\nYou need to add one animal at least.");
+			
+			ifPressed = !ifPressed;
+		}
+
+		revalidate();
+		
+		repaint();			
+	}
+
 	public int getAnimalCount(){
 		return animalsCount;
 	}
@@ -229,7 +269,7 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 			int totalFood = 0;
 			DefaultTableModel model = new DefaultTableModel();
 			model.setColumnIdentifiers(new String[] { "Animal", "Color",
-					"Size", "Hor. Speed", "Ver. Speed", "Eat Count" });
+					"Size", "Hor. Speed", "Ver. Speed", "Eat Count", "Feeding Freq." });
 			JTable table = new JTable(model);
 
 			ITE = creatures.iterator();
@@ -239,7 +279,7 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 
 				model.addRow(new Object[] { cur.getAnimalName(),
 						cur.getColor(), cur.getSize(), cur.getHorSpeed(),
-						cur.getVerSpeed(), cur.getEatCount() });
+						cur.getVerSpeed(), cur.getEatCount(), cur.getFeedFreq() });
 
 				totalFood += cur.getEatCount();
 				} catch (ClassCastException ex){}
@@ -492,6 +532,11 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 				return "Green";
 			else if (((Color) obj).equals(Color.MAGENTA))
 				return "Magenta";
+			else {
+				return "(" + ((Color) obj).getRed() + ","
+						+ ((Color) obj).getGreen() + ","
+						+ ((Color) obj).getBlue() + ")";
+			}
 		}
 
 		return null;

@@ -7,6 +7,7 @@ import java.util.Vector;
 import java.util.concurrent.CyclicBarrier;
 
 import aquarium.HungerState;
+import aquarium.MarineAnimal;
 import aquarium.Observer;
 import aquarium.Satiated;
 import aquarium.SeaCreature;
@@ -22,7 +23,7 @@ import aquarium.Memento;
  * @see Jellyfish
  */
 
-public abstract class Swimmable extends AnimalFactory implements SeaCreature, Cloneable {
+public abstract class Swimmable extends AnimalFactory implements SeaCreature, Cloneable, MarineAnimal {
 
 	private final String uid = UUID.randomUUID().toString(); // generate unique id to specific instance.
 	protected HungerState state;

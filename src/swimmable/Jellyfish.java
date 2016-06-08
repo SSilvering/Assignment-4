@@ -361,9 +361,8 @@ public class Jellyfish extends Swimmable {
 				}
 			}
 
-			synchronized (Jellyfish.class) {
-				aquaPanel.repaint();
-			}
+			aquaPanel.repaint();
+
 		}
 	}
 
@@ -408,5 +407,10 @@ public class Jellyfish extends Swimmable {
 	@Override
 	public void set_Y_front(int y) {
 		this.y_front = y;
+	}
+
+	@Override
+	public void PaintFish(Color col) {
+		this.col = col;		
 	}
 }
