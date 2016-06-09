@@ -47,7 +47,7 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 	private int plantsCount = 0;
 	private JPanelDecorator JPD;
 	public static boolean ifPressed = false;
-	public static boolean AQisSuspend = false;
+	public static boolean AQisSuspend = false; 
 
 	/**
 	 * Constructor that keeps a reference of the main framework (AquaFrame) to
@@ -190,7 +190,8 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 	}
 	
 	/**
-	 *
+	 * This method opens animal's decorate panel . This gives the possibility to
+	 * change the color of the animal while running the program.
 	 */
 	public void decorateAnimal() {
 		ifPressed = !ifPressed;
@@ -216,10 +217,20 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 		repaint();			
 	}
 
+	/**
+	 * Getter - Counter of animals in the aquarium.
+	 * 
+	 * @return the number of animal in the aquarium.
+	 */
 	public int getAnimalCount(){
 		return animalsCount;
 	}
 	
+	/**
+	 * Getter - Counter inanimate objects (plants) in the aquarium.
+	 * 
+	 * @return the number of inanimate objects in the aquarium.
+	 */
 	public int getPlantCount(){
 		return plantsCount;
 	}
@@ -252,7 +263,7 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 		if (animalsCount < 5) {
 			new DuplicateAnimalDialog(this, creatures);
 		} else {
-			JOptionPane.showMessageDialog(aquaFrame,
+			JOptionPane.showMessageDialog(this,
 					"Cannot duplicate animals at this moment. \nCannot be more than 5 animals in the aquarium.", "Error",
 					JOptionPane.INFORMATION_MESSAGE);
 		}
@@ -284,7 +295,7 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 				totalFood += cur.getEatCount();
 				} catch (ClassCastException ex){}
 			}
-			model.addRow(new Object[] { "Total:", "", "", "", "", totalFood });
+			model.addRow(new Object[] { "Total:", "", "", "", "", "", totalFood });
 
 			table.setPreferredScrollableViewportSize(table.getPreferredSize());
 			scrollPane = new JScrollPane(table);
@@ -316,7 +327,7 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 				}
 			}
 		} catch (IllegalArgumentException ex) {
-			JOptionPane.showMessageDialog(aquaFrame,
+			JOptionPane.showMessageDialog(this,
 					"Please add one animal at least for giving a food.",
 					"Error", JOptionPane.INFORMATION_MESSAGE);
 			isFood = false;
@@ -413,13 +424,13 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 	 */
 	private void addAnimalDialog() {
 		if (animalsCount > 4)
-			JOptionPane.showMessageDialog(aquaFrame,
+			JOptionPane.showMessageDialog(this,
 					"Cannot create more than 5 animals.", "Error",
 					JOptionPane.INFORMATION_MESSAGE);
 		else if (isFood == false)
 			new AddAnimalDialog(this);
 		else {
-			JOptionPane.showMessageDialog(aquaFrame,
+			JOptionPane.showMessageDialog(this,
 					"Wait until animals will eat their food.", "Error",
 					JOptionPane.INFORMATION_MESSAGE);
 		}
@@ -433,7 +444,7 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 	 */
 	private void addPlantDialog() {	
 		if (plantsCount > 4)
-			JOptionPane.showMessageDialog(aquaFrame,
+			JOptionPane.showMessageDialog(this,
 					"Cannot create more than 5 plants.", "Error",
 					JOptionPane.INFORMATION_MESSAGE);
 		else 
@@ -464,7 +475,7 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 					animalsCount++;
 				}
 			} catch (ClassCastException ex) {
-				JOptionPane.showMessageDialog(aquaFrame,
+				JOptionPane.showMessageDialog(this,
 						"Cannot continue right now.", "Error",
 						JOptionPane.INFORMATION_MESSAGE);
 			}
@@ -559,7 +570,7 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 		}
 
 		if (isFood == true) {
-			Worm.getInstance().drawWorm(this, g);
+			Worm.getInstance().drawWorm(this, g); // makes worm in Singleton design pattern form. 
 		}
 	}
 
@@ -567,7 +578,7 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 	public void notify(String msg) {
 		if(msg.equals("Hungry"))
 		{
-		JOptionPane.showMessageDialog(aquaFrame,
+		JOptionPane.showMessageDialog(this,
 				"Please feed us!", "Info",
 				JOptionPane.INFORMATION_MESSAGE);
 		}

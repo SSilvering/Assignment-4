@@ -536,6 +536,8 @@ public class DuplicateAnimalDialog extends JDialog {
 	 *            Vertical speed of the animal that going to be duplicated.
 	 * @param horSpeed
 	 *            Horizontal speed of the animal that going to be duplicated.
+	 * @param col
+	 *            Animal's color that going to be duplicated.
 	 */
 	private void setValues() {
 		if (comboBox.getSelectedIndex() != -1) {
