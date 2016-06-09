@@ -85,9 +85,10 @@ public class Jellyfish extends Swimmable {
 	 *            gets reference to object which going to be copied.
 	 */
 	public Jellyfish(Jellyfish obj) {
-		super(obj.horSpeed, obj.verSpeed, obj.size, obj.col, obj.feedFreq);
-		super.setName("Jellyfish");
-
+		super(obj.horSpeed, obj.verSpeed, obj.size, obj.col, obj.feedFreq);		
+		super.name = "Jellyfish";
+		super.setName(obj.getName());
+		
 		// check if adding new fish when the board is suspended, in case and
 		// that is true and the game was suspended it avoids from the new animal
 		// to start moving

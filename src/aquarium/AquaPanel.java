@@ -280,7 +280,7 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 			int totalFood = 0;
 			DefaultTableModel model = new DefaultTableModel();
 			model.setColumnIdentifiers(new String[] { "Animal", "Color",
-					"Size", "Hor. Speed", "Ver. Speed", "Eat Count", "Feeding Freq." });
+					"Size", "Hor. Speed", "Ver. Speed", "Eat Count", "Feeding Freq.", "Hungry State" });
 			JTable table = new JTable(model);
 
 			ITE = creatures.iterator();
@@ -290,12 +290,12 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 
 				model.addRow(new Object[] { cur.getAnimalName(),
 						cur.getColor(), cur.getSize(), cur.getHorSpeed(),
-						cur.getVerSpeed(), cur.getEatCount(), cur.getFeedFreq() });
+						cur.getVerSpeed(), cur.getEatCount(), cur.getFeedFreq(), cur.getHungerState() });
 
 				totalFood += cur.getEatCount();
 				} catch (ClassCastException ex){}
 			}
-			model.addRow(new Object[] { "Total:", "", "", "", "", "", totalFood });
+			model.addRow(new Object[] { "Total:", "", "", "", "", "", "", totalFood });
 
 			table.setPreferredScrollableViewportSize(table.getPreferredSize());
 			scrollPane = new JScrollPane(table);

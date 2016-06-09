@@ -64,6 +64,10 @@ public abstract class Swimmable extends AnimalFactory implements SeaCreature, Cl
 		this.state = state;
 	}
 	
+	public String getHungerState(){
+		return state.toString();
+	}
+	
 	/**
 	 * This method returns the unique id of specific instance.
 	 * 

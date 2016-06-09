@@ -55,14 +55,13 @@ public class JPanelDecorator extends JPanel{
 		
 		this.setLayout(new BorderLayout());
 
-		String labelText = "<html><FONT SIZE=+1><FONT COLOR=RED>Choose an animal you want to change its color,</FONT><FONT SIZE=+1> and click on the button <FONT COLOR=BLUE>Change Color</FONT></html>";
-		JLabel label = new JLabel(labelText);
+		String text = "<html><FONT SIZE=+1><FONT COLOR=RED>Choose an animal you want to change its color,</FONT><FONT SIZE=+1> and click on the button <FONT COLOR=BLUE>Change Color</FONT></html>";
 
 		ChangeColor = new JButton("Change Color");
 		
 		fillList(creatures);
 		
-		add(label, BorderLayout.NORTH);
+		add(new JLabel(text), BorderLayout.NORTH);
 		add(objList, BorderLayout.CENTER);
 		add(ChangeColor, BorderLayout.SOUTH);
 
