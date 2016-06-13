@@ -28,6 +28,6 @@ public class MarineAnimalDecorator implements MarineAnimal {
 	
 	@Override
 	public void PaintFish(Color col) {
-		((Swimmable)animal).setColor(col);
+		animal.PaintFish(col);
 	}
 }
