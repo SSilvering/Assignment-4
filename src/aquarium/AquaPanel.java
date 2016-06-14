@@ -33,7 +33,7 @@ import aquaContents.Worm;
  *
  */
 
-public class AquaPanel extends JPanel implements aquarium.Observer{
+public class AquaPanel extends JPanel implements aquarium.Observer {
 
 	private static final long serialVersionUID = 1L;
 	private AquaFrame aquaFrame;
@@ -47,7 +47,7 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 	private int plantsCount = 0;
 	private JPanelDecorator JPD;
 	public static boolean ifPressed = false;
-	public static boolean AQisSuspend = false; 
+	public static boolean AQisSuspend = false;
 
 	/**
 	 * Constructor that keeps a reference of the main framework (AquaFrame) to
@@ -77,7 +77,8 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 		Panel.setLayout(new FlowLayout());
 
 		// "Add Animal" button.
-		JButton addAnimalBtn = new JButton("<html><div style='text-align: center;'>Add<br />Animal</html>");
+		JButton addAnimalBtn = new JButton(
+				"<html><div style='text-align: center;'>Add<br />Animal</html>");
 		addAnimalBtn.setPreferredSize(new Dimension(74, 35));
 		addAnimalBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -88,7 +89,8 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 		Panel.add(addAnimalBtn);
 
 		// "Add Plant" button.
-		JButton addPlantBtn = new JButton("<html><div style='text-align: center;'>Add<br />Plant</html>");
+		JButton addPlantBtn = new JButton(
+				"<html><div style='text-align: center;'>Add<br />Plant</html>");
 		addPlantBtn.setPreferredSize(new Dimension(74, 35));
 		addPlantBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -97,9 +99,10 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 			}
 		});
 		Panel.add(addPlantBtn);
-		
+
 		// "Duplicate Animal" button.
-		JButton dupAnimalBtn = new JButton("<html><div style='text-align: center;'>Duplicate<br />Animal</html>");
+		JButton dupAnimalBtn = new JButton(
+				"<html><div style='text-align: center;'>Duplicate<br />Animal</html>");
 		dupAnimalBtn.setPreferredSize(new Dimension(74, 35));
 		dupAnimalBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -108,9 +111,10 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 			}
 		});
 		Panel.add(dupAnimalBtn);
-		
+
 		// "Decorator" button
-		JButton decoratorBtn = new JButton("<html><div style='text-align: center;'>Decorator<br /></html>");
+		JButton decoratorBtn = new JButton(
+				"<html><div style='text-align: center;'>Decorator<br /></html>");
 		decoratorBtn.setPreferredSize(new Dimension(78, 35));
 		decoratorBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -119,7 +123,7 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 			}
 		});
 		Panel.add(decoratorBtn);
-		
+
 		// "Sleep" button.
 		JButton sleepBtn = new JButton("Sleep");
 		sleepBtn.setPreferredSize(new Dimension(74, 35));
@@ -132,7 +136,8 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 		Panel.add(sleepBtn);
 
 		// "Wake up" button.
-		JButton wakeUpBtn = new JButton("<html><div style='text-align: center;'>Wake<br />Up</html>");
+		JButton wakeUpBtn = new JButton(
+				"<html><div style='text-align: center;'>Wake<br />Up</html>");
 		wakeUpBtn.setPreferredSize(new Dimension(74, 35));
 		wakeUpBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -188,33 +193,34 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 
 		this.add(Panel, BorderLayout.SOUTH);
 	}
-	
+
 	/**
 	 * This method opens animal's decorate panel . This gives the possibility to
 	 * change the color of the animal while running the program.
 	 */
 	public void decorateAnimal() {
 		ifPressed = !ifPressed;
-		
+
 		if (animalsCount != 0) {
-			
+
 			if (ifPressed) {
 				JPD = new JPanelDecorator(this, creatures);
 				add(JPD);
 			} else {
 				JPD.dispose();
 			}
-			
-		} else 
-		{
-			JOptionPane.showMessageDialog(this, "No animals in the aquarium.\nYou need to add one animal at least.");
-			
+
+		} else {
+			JOptionPane
+					.showMessageDialog(this,
+							"No animals in the aquarium.\nYou need to add one animal at least.");
+
 			ifPressed = !ifPressed;
 		}
 
 		revalidate();
-		
-		repaint();			
+
+		repaint();
 	}
 
 	/**
@@ -222,32 +228,34 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 	 * 
 	 * @return the number of animal in the aquarium.
 	 */
-	public int getAnimalCount(){
+	public int getAnimalCount() {
 		return animalsCount;
 	}
-	
+
 	/**
 	 * Getter - Counter inanimate objects (plants) in the aquarium.
 	 * 
 	 * @return the number of inanimate objects in the aquarium.
 	 */
-	public int getPlantCount(){
+	public int getPlantCount() {
 		return plantsCount;
 	}
-	
+
 	/**
-	 * This method opens the saving state dialog for saving state of animal or plant.
+	 * This method opens the saving state dialog for saving state of animal or
+	 * plant.
 	 */
-	public void saveDialog(){
+	public void saveDialog() {
 		animalSleep(); // hold animals for saving specific moment.
-		
+
 		new SaveDialog(this, creatures);
-		
+
 		animalWakeup(); // release animals from holding.
 	}
-	
+
 	/**
-	 * This method opens the restore dialog for restoring state of animal or plant.
+	 * This method opens the restore dialog for restoring state of animal or
+	 * plant.
 	 */
 	public void restoreDialog() {
 		new RestoreDialog(this);
@@ -263,9 +271,11 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 		if (animalsCount < 5) {
 			new DuplicateAnimalDialog(this, creatures);
 		} else {
-			JOptionPane.showMessageDialog(this,
-					"Cannot duplicate animals at this moment. \nCannot be more than 5 animals in the aquarium.", "Error",
-					JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane
+					.showMessageDialog(
+							this,
+							"Cannot duplicate animals at this moment. \nCannot be more than 5 animals in the aquarium.",
+							"Error", JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 
@@ -280,22 +290,26 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 			int totalFood = 0;
 			DefaultTableModel model = new DefaultTableModel();
 			model.setColumnIdentifiers(new String[] { "Animal", "Color",
-					"Size", "Hor. Speed", "Ver. Speed", "Eat Count", "Feeding Freq.", "Hungry State" });
+					"Size", "Hor. Speed", "Ver. Speed", "Feeding Freq.",
+					"Hungry State", "Eat Count" });
 			JTable table = new JTable(model);
 
 			ITE = creatures.iterator();
 			while (ITE.hasNext()) {
-				try{
-				Swimmable cur = (Swimmable) ITE.next();
+				try {
+					Swimmable cur = (Swimmable) ITE.next();
 
-				model.addRow(new Object[] { cur.getAnimalName(),
-						cur.getColor(), cur.getSize(), cur.getHorSpeed(),
-						cur.getVerSpeed(), cur.getEatCount(), cur.getFeedFreq(), cur.getHungerState() });
+					model.addRow(new Object[] { cur.getAnimalName(),
+							cur.getColor(), cur.getSize(), cur.getHorSpeed(),
+							cur.getVerSpeed(), cur.getFeedFreq(),
+							cur.getHungerState(), cur.getEatCount() });
 
-				totalFood += cur.getEatCount();
-				} catch (ClassCastException ex){}
+					totalFood += cur.getEatCount();
+				} catch (ClassCastException ex) {
+				}
 			}
-			model.addRow(new Object[] { "Total:", "", "", "", "", "", "", totalFood });
+			model.addRow(new Object[] { "Total:", "", "", "", "", "", "",
+					totalFood });
 
 			table.setPreferredScrollableViewportSize(table.getPreferredSize());
 			scrollPane = new JScrollPane(table);
@@ -354,7 +368,7 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 		synchronized (this) {
 			anim.eatInc(); // increments the food counter of a specific animal.
 			isFood = false;
-			
+
 			// after callback, allows checking of counting turns again.
 			ITE = creatures.iterator();
 			while (ITE.hasNext()) {
@@ -362,7 +376,7 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 					((Swimmable) ITE.next()).setStopCheck(false);
 				} catch (ClassCastException ex) {
 				}
-			}			
+			}
 		}
 	}
 
@@ -382,7 +396,7 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 		creatures.clear(); // clear the main frame from animal.
 		isFood = false; // if there is a food on the board it clears it.
 		animalsCount = 0;
-		plantsCount = 0;		
+		plantsCount = 0;
 
 		if (img != null)
 			img = null;
@@ -396,9 +410,9 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 	private void animalWakeup() {
 		ITE = creatures.iterator();
 		while (ITE.hasNext()) {
-			try{
-			((Swimmable) ITE.next()).setResume();
-			}catch (ClassCastException ex){
+			try {
+				((Swimmable) ITE.next()).setResume();
+			} catch (ClassCastException ex) {
 			}
 		}
 	}
@@ -409,9 +423,9 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 	private void animalSleep() {
 		ITE = creatures.iterator();
 		while (ITE.hasNext()) {
-			try{
-			((Swimmable) ITE.next()).setSuspend();
-			}catch (ClassCastException ex){
+			try {
+				((Swimmable) ITE.next()).setSuspend();
+			} catch (ClassCastException ex) {
 			}
 		}
 	}
@@ -435,20 +449,20 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 					JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
-	
+
 	/**
 	 * This method opening the adds plant dialog for adding new plant to the
 	 * aquarium. It checks for the number of plants in the aquarium, if less
 	 * than 5, add plant dialog will open, otherwise appropriate message will
 	 * appear.
 	 */
-	private void addPlantDialog() {	
+	private void addPlantDialog() {
 		if (plantsCount > 4)
 			JOptionPane.showMessageDialog(this,
 					"Cannot create more than 5 plants.", "Error",
 					JOptionPane.INFORMATION_MESSAGE);
-		else 
-			new AddPlantDialog(this);		
+		else
+			new AddPlantDialog(this);
 	}
 
 	/**
@@ -460,12 +474,12 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 	protected void addCreature(SeaCreature sc) {
 		if (sc.toString().equals("Zostera")
 				|| sc.toString().equals("Laminaria")) {
-			
-			if(creatures.contains(sc) == false){
+
+			if (creatures.contains(sc) == false) {
 				creatures.add(sc);
 				plantsCount++;
 			}
-			
+
 			this.repaint();
 		} else {
 			try {
@@ -481,11 +495,11 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 			}
 		}
 	}
-	
-	public boolean ifContains(Object obj){
-		if(creatures.contains(obj))
+
+	public boolean ifContains(Object obj) {
+		if (creatures.contains(obj))
 			return true;
-		
+
 		return false;
 	}
 
@@ -570,17 +584,16 @@ public class AquaPanel extends JPanel implements aquarium.Observer{
 		}
 
 		if (isFood == true) {
-			Worm.getInstance().drawWorm(this, g); // makes worm in Singleton design pattern form. 
+			Worm.getInstance().drawWorm(this, g); // makes worm in Singleton
+													// design pattern form.
 		}
 	}
 
 	@Override
 	public void notify(String msg) {
-		if(msg.equals("Hungry"))
-		{
-		JOptionPane.showMessageDialog(this,
-				"Please feed us!", "Info",
-				JOptionPane.INFORMATION_MESSAGE);
+		if (msg.equals("Hungry")) {
+			JOptionPane.showMessageDialog(this, "Please feed us!", "Info",
+					JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 }
